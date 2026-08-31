@@ -1,7 +1,5 @@
 ﻿"""
 Linear Composite Early-Warning Model (CEWF-Linear).
-Normalizes multi-metric indicators using causal running baseline statistics
-and evaluates a weighted consensus score: W(t) = sum_i w_i S_i(t).
 """
 
 from typing import List, Optional
@@ -11,12 +9,6 @@ from src.models.base_model import BaseEarlyWarningModel
 
 
 class LinearCompositeModel(BaseEarlyWarningModel):
-    """
-    Linear weighted aggregation of standardized early warning indicators.
-    
-    Weights can be 'uniform' (1/M) or 'custom' array.
-    """
-    
     def __init__(
         self,
         indicators: List[BaseIndicator],
@@ -29,22 +21,16 @@ class LinearCompositeModel(BaseEarlyWarningModel):
             self.weights = np.full(n_ind, 1.0 / n_ind, dtype=np.float64)
         else:
             self.weights = np.array(weights, dtype=np.float64) / np.sum(weights)
-            
         self.baseline_means = None
         self.baseline_stds = None
 
-    def fit(self, baseline_trajectories: List[np.ndarray], window_size: int = 50) -> 'LinearCompositeModel':
-        """
-        Learns empirical baseline mean and std for each indicator from stable null runs.
-        """
+    def fit(self, baseline_trajectories: List[np.ndarray], window_size: int = 50, step: int = 1) -> 'LinearCompositeModel':
         all_feats = []
         for traj in baseline_trajectories:
-            feat = self.extract_indicator_features(traj, window_size=window_size)
-            # Take valid non-NaN rows
+            feat = self.extract_indicator_features(traj, window_size=window_size, step=step)
             valid_rows = feat[~np.isnan(feat).any(axis=1)]
             if len(valid_rows) > 0:
                 all_feats.append(valid_rows)
-                
         if len(all_feats) > 0:
             concat_feats = np.vstack(all_feats)
             self.baseline_means = np.nanmean(concat_feats, axis=0)
@@ -54,46 +40,37 @@ class LinearCompositeModel(BaseEarlyWarningModel):
             n_ind = len(self.indicators)
             self.baseline_means = np.zeros(n_ind)
             self.baseline_stds = np.ones(n_ind)
-            
         return self
 
     def predict_score(
         self,
         x: np.ndarray,
         window_size: int = 50,
+        step: int = 1,
         features: Optional[np.ndarray] = None
     ) -> np.ndarray:
         if features is None:
-            features = self.extract_indicator_features(x, window_size=window_size)
+            features = self.extract_indicator_features(x, window_size=window_size, step=step)
             
         n_obs, n_ind = features.shape
         scores = np.full(n_obs, np.nan, dtype=np.float64)
         
-        # If not fit on external baseline, calibrate on first 25% of valid data
+        valid_mask = ~np.isnan(features).any(axis=1)
+        if np.sum(valid_mask) == 0:
+            return scores
+            
         if self.baseline_means is None:
-            valid_idx = np.where(~np.isnan(features).any(axis=1))[0]
-            if len(valid_idx) > 10:
-                calib_end = valid_idx[min(len(valid_idx) // 4, 100)]
-                calib_data = features[valid_idx[0] : calib_end + 1]
-                means = np.nanmean(calib_data, axis=0)
-                stds = np.nanstd(calib_data, axis=0)
-                stds[stds < 1e-6] = 1.0
-            else:
-                means = np.zeros(n_ind)
-                stds = np.ones(n_ind)
+            valid_idx = np.where(valid_mask)[0]
+            calib_end = valid_idx[min(len(valid_idx) // 4, 100)]
+            calib_data = features[valid_idx[0] : calib_end + 1]
+            means = np.nanmean(calib_data, axis=0)
+            stds = np.nanstd(calib_data, axis=0)
+            stds[stds < 1e-6] = 1.0
         else:
             means = self.baseline_means
             stds = self.baseline_stds
             
-        # Standardize features: z_i = (S_i - mu_0) / sigma_0
-        norm_feats = (features - means) / stds
-        
-        # Weighted sum of positive standardized deviations
-        for k in range(n_obs):
-            row = norm_feats[k]
-            if np.isnan(row).any():
-                continue
-            # Composite score: positive consensus
-            scores[k] = float(np.dot(self.weights, np.maximum(row, 0.0)))
-            
+        norm_feats = (features[valid_mask] - means) / stds
+        pos_norm = np.maximum(norm_feats, 0.0)
+        scores[valid_mask] = pos_norm @ self.weights
         return scores

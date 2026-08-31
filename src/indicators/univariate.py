@@ -3,10 +3,8 @@ Univariate early-warning indicators (Statistical, Dynamical, and Information-The
 """
 
 import math
-from itertools import permutations
 from typing import Optional, Dict
 import numpy as np
-import scipy.stats as st
 from src.indicators.base_indicator import BaseIndicator
 
 
@@ -27,7 +25,7 @@ class AutocorrelationLag1Indicator(BaseIndicator):
     """Rolling lag-1 temporal autocorrelation AR(1)."""
     
     def __init__(self):
-        super().__init__(name="Autocorrelation_AR1", is_multivariate=False)
+        super().__init__(name="AR(1)", is_multivariate=False)
 
     def compute_window(self, window: np.ndarray) -> float:
         y = window if window.ndim == 1 else window[:, 0]
@@ -53,8 +51,12 @@ class SkewnessIndicator(BaseIndicator):
         y = window if window.ndim == 1 else window[:, 0]
         if len(y) < 4:
             return np.nan
-        val = st.skew(y, bias=False)
-        return float(val) if not np.isnan(val) else 0.0
+        dev = y - np.mean(y)
+        s2 = np.mean(dev**2)
+        if s2 < 1e-12:
+            return 0.0
+        m3 = np.mean(dev**3)
+        return float(m3 / (s2**1.5))
 
 
 class KurtosisIndicator(BaseIndicator):
@@ -67,8 +69,12 @@ class KurtosisIndicator(BaseIndicator):
         y = window if window.ndim == 1 else window[:, 0]
         if len(y) < 5:
             return np.nan
-        val = st.kurtosis(y, bias=False)
-        return float(val) if not np.isnan(val) else 0.0
+        dev = y - np.mean(y)
+        s2 = np.mean(dev**2)
+        if s2 < 1e-12:
+            return 0.0
+        m4 = np.mean(dev**4)
+        return float(m4 / (s2**2) - 3.0)
 
 
 class PermutationEntropyIndicator(BaseIndicator):
@@ -78,7 +84,7 @@ class PermutationEntropyIndicator(BaseIndicator):
     """
     
     def __init__(self, m: int = 3, tau: int = 1):
-        super().__init__(name=f"PermutationEntropy_m{m}_t{tau}", is_multivariate=False)
+        super().__init__(name=f"PermutationEntropy", is_multivariate=False)
         self.m = m
         self.tau = tau
         self.max_entropy = np.log(float(math.factorial(m)))
@@ -90,18 +96,29 @@ class PermutationEntropyIndicator(BaseIndicator):
         if n_patterns <= 0:
             return np.nan
             
+        # Fast vectorized path for default m=3, tau=1
+        if self.m == 3 and self.tau == 1:
+            y0, y1, y2 = y[:-2], y[1:-1], y[2:]
+            c0 = (y0 < y1) & (y1 < y2)
+            c1 = (y0 < y2) & (y2 <= y1)
+            c2 = (y1 <= y0) & (y0 < y2)
+            c3 = (y1 < y2) & (y2 <= y0)
+            c4 = (y2 <= y0) & (y0 < y1)
+            c5 = (y2 <= y1) & (y1 <= y0)
+            counts = np.array([np.sum(c0), np.sum(c1), np.sum(c2), np.sum(c3), np.sum(c4), np.sum(c5)], dtype=np.float64)
+            p = counts[counts > 0] / n_patterns
+            entropy = -np.sum(p * np.log(p))
+            return float(entropy / self.max_entropy)
+            
         patterns = {}
         for i in range(n_patterns):
             sub = y[i : i + self.m * self.tau : self.tau]
-            # Get ordinal permutation rank
             perm = tuple(np.argsort(sub))
             patterns[perm] = patterns.get(perm, 0) + 1
             
         probs = np.array(list(patterns.values()), dtype=np.float64) / n_patterns
         entropy = -np.sum(probs * np.log(probs + 1e-12))
-        # Normalize to [0, 1]
-        norm_entropy = float(entropy / self.max_entropy)
-        return norm_entropy
+        return float(entropy / self.max_entropy)
 
 
 class SpectralReddeningIndicator(BaseIndicator):
@@ -118,9 +135,7 @@ class SpectralReddeningIndicator(BaseIndicator):
         n = len(y)
         if n < 8:
             return np.nan
-        # Detrend window linearly to avoid low-frequency DC bias
         y_detrend = y - np.linspace(y[0], y[-1], n)
-        # Power spectrum via FFT
         fft_vals = np.fft.rfft(y_detrend)
         psd = np.abs(fft_vals)**2
         if len(psd) <= 1 or np.sum(psd) < 1e-12:
@@ -147,7 +162,6 @@ class RecoveryRateIndicator(BaseIndicator):
         ar1 = self.ar1_ind.compute_window(window)
         if np.isnan(ar1):
             return np.nan
-        # Clip ar1 strictly inside (0, 0.999)
         ar1_clipped = np.clip(ar1, 1e-4, 0.999)
         rate = -np.log(ar1_clipped) / self.dt
         return float(rate)

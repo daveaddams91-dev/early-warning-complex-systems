@@ -1,6 +1,5 @@
 ﻿"""
 Non-Parametric Rank-Aggregation Composite Model (CEWF-Rank).
-Combines causal rolling Kendall tau trends across multi-indicator ensembles.
 """
 
 from typing import List, Optional
@@ -11,15 +10,10 @@ from src.models.base_model import BaseEarlyWarningModel
 
 
 class RankAggregationModel(BaseEarlyWarningModel):
-    """
-    Non-parametric multi-indicator rank consensus model.
-    Computes rolling Kendall tau on every indicator and averages positive trend agreements.
-    """
-    
     def __init__(
         self,
         indicators: List[BaseIndicator],
-        trend_window: int = 40,
+        trend_window: int = 30,
         aggregation_method: str = "mean",
         name: str = "CEWF-Rank"
     ):
@@ -28,35 +22,32 @@ class RankAggregationModel(BaseEarlyWarningModel):
         self.aggregation_method = aggregation_method
         self.trend_estimator = RollingKendallTrend(trend_window=trend_window)
 
-    def fit(self, baseline_trajectories: List[np.ndarray], window_size: int = 50) -> 'RankAggregationModel':
-        # Non-parametric rank method requires no parameter fitting
+    def fit(self, baseline_trajectories: List[np.ndarray], window_size: int = 50, step: int = 1) -> 'RankAggregationModel':
         return self
 
     def predict_score(
         self,
         x: np.ndarray,
         window_size: int = 50,
+        step: int = 1,
         features: Optional[np.ndarray] = None
     ) -> np.ndarray:
         if features is None:
-            features = self.extract_indicator_features(x, window_size=window_size)
+            features = self.extract_indicator_features(x, window_size=window_size, step=step)
             
         n_obs, n_ind = features.shape
         taus = np.full((n_obs, n_ind), np.nan, dtype=np.float64)
         
         for idx in range(n_ind):
             series = features[:, idx]
-            tau_series = self.trend_estimator.compute(series)
-            taus[:, idx] = tau_series
+            taus[:, idx] = self.trend_estimator.compute(series, step=step)
             
-        # Aggregate positive Kendall tau trends across indicators
         scores = np.full(n_obs, np.nan, dtype=np.float64)
         
         for k in range(n_obs):
             row_tau = taus[k]
             if np.isnan(row_tau).any():
                 continue
-            # Keep positive trends (consistent with critical slowing down / resilience loss)
             pos_tau = np.maximum(row_tau, 0.0)
             if self.aggregation_method == "mean":
                 scores[k] = float(np.mean(pos_tau))

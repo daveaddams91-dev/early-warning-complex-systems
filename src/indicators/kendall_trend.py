@@ -5,7 +5,6 @@ Computes Kendall rank correlation tau between time and metric values over a roll
 
 from typing import Optional
 import numpy as np
-import scipy.stats as st
 
 
 class RollingKendallTrend:
@@ -14,15 +13,15 @@ class RollingKendallTrend:
     Strictly non-leaking: at index k, uses only S[k - trend_window + 1 : k + 1].
     """
     
-    def __init__(self, trend_window: int = 50):
+    def __init__(self, trend_window: int = 30):
         self.trend_window = trend_window
+        w = trend_window
+        self.denom = w * (w - 1) / 2.0
+        self.i_idx, self.j_idx = np.triu_indices(w, k=1)
 
-    def compute(self, indicator_series: np.ndarray) -> np.ndarray:
+    def compute(self, indicator_series: np.ndarray, step: int = 1) -> np.ndarray:
         """
-        Computes rolling Kendall tau for a 1D indicator series.
-        
-        Returns:
-            1D array of same length as indicator_series, with np.nan where window is incomplete.
+        Computes rolling Kendall tau for a 1D indicator series using fast vectorized pairwise signs.
         """
         n_obs = len(indicator_series)
         output = np.full(n_obs, np.nan, dtype=np.float64)
@@ -30,16 +29,26 @@ class RollingKendallTrend:
         if n_obs < self.trend_window:
             return output
             
-        time_index = np.arange(self.trend_window, dtype=np.float64)
+        w = self.trend_window
+        denom = self.denom
+        i_idx = self.i_idx
+        j_idx = self.j_idx
         
-        for k in range(self.trend_window - 1, n_obs):
-            sub = indicator_series[k - self.trend_window + 1 : k + 1]
-            if np.isnan(sub).any() or np.all(sub == sub[0]):
+        for k in range(w - 1, n_obs, step):
+            sub = indicator_series[k - w + 1 : k + 1]
+            if np.isnan(sub).any():
                 output[k] = 0.0
                 continue
-                
-            res = st.kendalltau(time_index, sub)
-            tau_val = res.correlation if not np.isnan(res.correlation) else 0.0
-            output[k] = float(tau_val)
+            # For i < j, concordant pair has sub[j] > sub[i]
+            s = np.sign(sub[j_idx] - sub[i_idx])
+            output[k] = float(np.sum(s) / denom)
             
+        if step > 1:
+            last_valid = np.nan
+            for k in range(n_obs):
+                if not np.isnan(output[k]):
+                    last_valid = output[k]
+                elif not np.isnan(last_valid):
+                    output[k] = last_valid
+                    
         return output

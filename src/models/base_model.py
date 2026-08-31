@@ -27,14 +27,6 @@ class BaseEarlyWarningModel(ABC):
     ) -> np.ndarray:
         """
         Computes all constituent indicators causally along time series x.
-        
-        Args:
-            x: 1D or 2D array of shape (N,) or (N, D)
-            window_size: Rolling window length
-            step: Subsampling stride
-            
-        Returns:
-            2D feature matrix of shape (N, n_indicators)
         """
         n_obs = len(x)
         n_ind = len(self.indicators)
@@ -51,10 +43,7 @@ class BaseEarlyWarningModel(ABC):
         return features
 
     @abstractmethod
-    def fit(self, baseline_trajectories: List[np.ndarray], window_size: int = 50) -> 'BaseEarlyWarningModel':
-        """
-        Calibrates model parameters using only baseline safe trajectories.
-        """
+    def fit(self, baseline_trajectories: List[np.ndarray], window_size: int = 50, step: int = 1) -> 'BaseEarlyWarningModel':
         pass
 
     @abstractmethod
@@ -62,19 +51,9 @@ class BaseEarlyWarningModel(ABC):
         self,
         x: np.ndarray,
         window_size: int = 50,
+        step: int = 1,
         features: Optional[np.ndarray] = None
     ) -> np.ndarray:
-        """
-        Computes the continuous composite early-warning score W(t) causally.
-        
-        Args:
-            x: Observation trajectory
-            window_size: Rolling window length
-            features: Precomputed feature matrix (optional)
-            
-        Returns:
-            1D array of shape (N,) containing warning scores.
-        """
         pass
 
     def predict_alarm(
@@ -82,12 +61,10 @@ class BaseEarlyWarningModel(ABC):
         x: np.ndarray,
         threshold: float,
         window_size: int = 50,
+        step: int = 1,
         features: Optional[np.ndarray] = None
     ) -> np.ndarray:
-        """
-        Computes binary alarms where W(t) >= threshold.
-        """
-        scores = self.predict_score(x, window_size=window_size, features=features)
+        scores = self.predict_score(x, window_size=window_size, step=step, features=features)
         alarms = (scores >= threshold).astype(int)
         alarms[np.isnan(scores)] = 0
         return alarms
