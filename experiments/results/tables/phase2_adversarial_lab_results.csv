@@ -1,0 +1,13 @@
+Adversarial_Scenario,Expected_Physical_Outcome,Model,False_Alarm_Rate
+Scenario_1_Sinusoidal_False_CSD,No Collapse (False Positive Test),Baseline_AR1,1.0
+Scenario_1_Sinusoidal_False_CSD,No Collapse (False Positive Test),CEWF_Rank,1.0
+Scenario_1_Sinusoidal_False_CSD,No Collapse (False Positive Test),CEWF_Mahalanobis,1.0
+Scenario_1_Sinusoidal_False_CSD,No Collapse (False Positive Test),Adaptive_Bayesian_EWS,1.0
+Scenario_2_Noise_Spectrum_Shift,No Collapse (False Positive Test),Baseline_AR1,1.0
+Scenario_2_Noise_Spectrum_Shift,No Collapse (False Positive Test),CEWF_Rank,1.0
+Scenario_2_Noise_Spectrum_Shift,No Collapse (False Positive Test),CEWF_Mahalanobis,1.0
+Scenario_2_Noise_Spectrum_Shift,No Collapse (False Positive Test),Adaptive_Bayesian_EWS,1.0
+Scenario_3_Hidden_Variable_Crisis,Sudden Collapse (False Negative Test),Baseline_AR1,1.0
+Scenario_3_Hidden_Variable_Crisis,Sudden Collapse (False Negative Test),CEWF_Rank,1.0
+Scenario_3_Hidden_Variable_Crisis,Sudden Collapse (False Negative Test),CEWF_Mahalanobis,1.0
+Scenario_3_Hidden_Variable_Crisis,Sudden Collapse (False Negative Test),Adaptive_Bayesian_EWS,1.0
