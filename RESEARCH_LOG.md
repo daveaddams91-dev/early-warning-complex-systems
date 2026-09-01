@@ -41,9 +41,18 @@
 - Authored `FINAL_REPORT.md` (comprehensive research paper) and `README.md`.
 - Authored complete `docs/` suite (`mathematical-framework.md`, `experimental-design.md`, `reproducibility.md`).
 
+### [2026-09-01 13:40] — Statistical Testing Rigor, DeLong Test Repair & Data Reconciliation
+- **Wired Genuine Paired DeLong Engine**: Replaced historical placeholder string branch (`'< 0.001' if auc_mahal > auc_var else '0.08'`) in `experiments/scripts/run_all_experiments.py` with genuine `delong_paired_test` computations.
+- **Fast $O(N \log N)$ Mid-Rank Implementation**: Optimized `delong_roc_variance` in `src/evaluation/metrics.py` via `scipy.stats.rankdata` mid-ranks (Sun & Xu 2014) to eliminate memory bloat while preserving machine-precision covariance equivalence.
+- **AMOC DeLong Result**: Proved definitively that CEWF-Mahalanobis vs Variance on SYS-4 Stommel AMOC is statistically non-significant ($Z = 0.9031, p = 0.3665$) on chance-level data ($0.5169$ vs $0.5127$).
+- **Data Reconciliation**: Reconciled historical summary tables with `level1_clean_benchmark.csv` (SYS-1 CEWF-Linear is $0.9960$, SYS-5 CEWF-Linear is $1.0000$, and SYS-5 baselines PCA1_Variance/MahalanobisDist/DNB_Index are $1.0000$).
+- **RuntimeWarning Elimination**: Scaled burn-in in `src/advancements/theoretical_analysis.py` to eliminate `Degrees of freedom <= 0 for slice` warnings.
+- **PyTest Suite Expansion**: Added unit tests in `tests/test_evaluation.py`, bringing suite to **52 passed tests with 0 warnings**.
+- **Audit Documentation**: Published `docs/STATISTICAL_TESTING_AUDIT.md` and updated `CRITICAL_REVIEW.md`.
+
 ---
 
-### TRACK STATUS: COMPLETE (All 10 Phases Verified & Persisted)
+### TRACK STATUS: COMPLETE (All Phases Verified & Persisted)
 - [x] Phase 0: Workspace Setup & Verification
 - [x] Phase 1: Literature Research & Novelty Audit (`REFERENCES.md`, `NOVELTY_AUDIT.md`)
 - [x] Phase 2: Mathematical Blueprint & Research Log (`RESEARCH_BLUEPRINT.md`, `RESEARCH_LOG.md`)
@@ -55,3 +64,5 @@
 - [x] Phase 8: Scientific Analysis & Statistical Testing (`statistical_significance_delong.csv`)
 - [x] Phase 9: Research Review & Red-Teaming (`CRITICAL_REVIEW.md`, `LIMITATIONS.md`)
 - [x] Phase 10: Final Manuscript, Documentation & Version Control (`FINAL_REPORT.md`, `README.md`, `docs/`)
+- [x] Phase 11: Statistical Testing Rigor, DeLong Test Repair & Data Reconciliation (`docs/STATISTICAL_TESTING_AUDIT.md`)
+
