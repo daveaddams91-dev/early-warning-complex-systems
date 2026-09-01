@@ -130,3 +130,32 @@ class TestPhase4Advancements:
         snr_low = 0.05
         n_req_low = c_val / (snr_low**2)
         assert n_req_low > n_max, "Very low SNR should exceed maximum quasi-stationary window"
+
+    def test_aewif_persistence_filter_and_zero_weight_abstention(self):
+        # 1. Test persistence filter: transient single spike must NOT trigger alarm_active
+        aewif = AdaptiveInferenceFramework(
+            window_size=20, trend_window=15, reliability_threshold=0.25,
+            alarm_threshold=1.5, persistence_steps=4
+        )
+        rng = np.random.default_rng(101)
+        traj = np.ones((200, 1)) + rng.normal(0, 0.01, size=(200, 1))
+        # Single transient spike at step 50
+        traj[50, 0] = 10.0
+
+        # Calibrate baseline
+        baselines = [np.ones((200, 1)) + rng.normal(0, 0.01, size=(200, 1)) for _ in range(5)]
+        aewif.calibrate_baseline(baselines, step=2)
+
+        res = aewif.predict_trajectory(traj, step=2)
+        assert 'alarm_active' in res
+        assert res['alarm_active'].dtype == bool
+
+        # Because spike lasted only 1 step (less than persistence_steps = 4), alarm_active at step 50 must be False
+        assert not res['alarm_active'][50], "Single-step spike should not trigger persistent alarm"
+
+        # 2. Test zero-weight abstention when completely flat null
+        flat_traj = np.ones((200, 1))
+        res_flat = aewif.predict_trajectory(flat_traj, step=2)
+        # Check that weights are strictly zero when no trend exists
+        assert np.all(res_flat['weights'][50] == 0.0), "Uninformative data must receive zero weights, not equal weights"
+        assert not res_flat['is_reliable'][50], "Uninformative data must be marked unreliable"

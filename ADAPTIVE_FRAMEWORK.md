@@ -1,4 +1,4 @@
-﻿# ADAPTIVE EARLY-WARNING INFERENCE FRAMEWORK (AEWIF)
+# ADAPTIVE EARLY-WARNING INFERENCE FRAMEWORK (AEWIF)
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 4 Adaptive Architecture Specification  
@@ -47,8 +47,8 @@ Combining these components:
 $$\alpha_i(t) = \max(0, c_i(t)) \cdot \min(3.0, \text{SNR}_i(t)) \cdot (1.0 - 0.7 \cdot \mathbb{I}_{\text{corrupted}}(i, t))$$
 
 ### 2.3 State-Dependent Adaptive Weights
-$$w_i(t) = \frac{\alpha_i(t)}{\sum_{j=1}^K \alpha_j(t) + \epsilon}$$
-If all indicators have zero informativeness ($\sum \alpha_j \le \epsilon$), the weights revert to a neutral uniform distribution.
+$$w_i(t) = \frac{\alpha_i(t)}{\sum_{j=1}^K \alpha_j(t)} \quad \text{if } \sum_{j=1}^K \alpha_j(t) > 10^{-4}, \quad \text{else } \mathbf{w}(t) = \mathbf{0}$$
+When no indicator exhibits statistically significant informativeness ($\sum \alpha_j \le 10^{-4}$), AEWIF strictly sets all weights to zero ($\mathbf{w}(t) = \mathbf{0}$) and declares the data uninformative, refusing to fall back to an unweighted average of noise channels.
 
 ### 2.4 System-Level Reliability Score $R(t) \in [0, 1]$
 AEWIF continuously calculates an objective reliability score:
@@ -57,13 +57,14 @@ $$R(t) = \sigma(\bar{z}(t) - 1.5) \cdot \left(\frac{1}{1 + \mathrm{Var}(z_1, \do
 - $R(t) \to 0$: Indicators are noisy, discordant, or swamped by high-frequency measurement error.
 
 ### 2.5 The Mandatory "None of the Above" Abstention State
-If $R(t) < R_{\text{threshold}}$ (calibrated at $R_{\text{thresh}} = 0.25$):
-$$\text{Decision}(t) = \text{UNRELIABLE (ABSTAIN)}, \quad W(t) = 0.0$$
-The system explicitly refuses to issue an early-warning alarm when the observational evidence is insufficient or contradictory.
+If $R(t) < R_{\text{threshold}}$ (calibrated and defaulted at $R_{\text{thresh}} = 0.25$) or if all indicators have zero informativeness ($\sum \alpha_j \le 10^{-4}$):
+$$\text{Decision}(t) = \text{UNRELIABLE (ABSTAIN)}, \quad W(t) = 0.0, \quad \text{is\_reliable} = \text{False}$$
+The system explicitly refuses to issue an early-warning alarm when the observational evidence is insufficient, contradictory, or uninformative.
 
-### 2.6 Multi-Step Causal Persistence Filter
-To prevent point alarm cascades ($P(\text{FA}) = 1 - (1-\alpha)^M \to 1$), an alarm is issued if and only if:
-$$W(t) \ge \theta_{\text{alarm}} \quad \text{for } P \ge 4 \text{ consecutive evaluation steps } (0.8\text{ s})$$
+### 2.6 Causal Multi-Step Persistence Filter
+To prevent point alarm cascades ($P(\text{FA}) = 1 - (1-\alpha)^M \to 1$), `predict_trajectory` outputs an operational boolean array `alarm_active(t)`:
+$$\text{alarm\_active}(t) = \text{True} \iff \left( W(t_k) \ge \theta_{\text{alarm}} \land \text{is\_reliable}(t_k) = \text{True} \right) \quad \forall k \in [t - P \cdot \Delta t_{\text{eval}}, t]$$
+with default persistence threshold $P = 4$ consecutive evaluation steps ($0.8\text{ s}$ at $S=4$) and alarm threshold $\theta_{\text{alarm}} = 2.0$. An isolated single-step anomaly does not trigger an alarm.
 
 ---
 

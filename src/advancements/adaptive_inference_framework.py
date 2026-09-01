@@ -36,7 +36,8 @@ class AdaptiveInferenceFramework:
         indicators: Optional[List[BaseIndicator]] = None,
         window_size: int = 50,
         trend_window: int = 30,
-        reliability_threshold: float = 0.30,
+        reliability_threshold: float = 0.25,
+        alarm_threshold: float = 2.0,
         persistence_steps: int = 4
     ):
         if indicators is None:
@@ -53,6 +54,7 @@ class AdaptiveInferenceFramework:
         self.window_size = window_size
         self.trend_window = trend_window
         self.reliability_threshold = reliability_threshold
+        self.alarm_threshold = alarm_threshold
         self.persistence_steps = persistence_steps
 
         # Baseline empirical calibration
@@ -184,9 +186,12 @@ class AdaptiveInferenceFramework:
             sum_alpha = np.sum(alpha)
             if sum_alpha > 1e-4:
                 w_k = alpha / sum_alpha
+                has_informative_signal = True
             else:
-                # Fallback to equal weights
-                w_k = np.ones(K) / K
+                # Strict abstention semantics: when no indicator is informative,
+                # do NOT fall back to equal weights. Assign zero weights and declare uninformative.
+                w_k = np.zeros(K)
+                has_informative_signal = False
 
             # 5. Calculate Reliability Score R(t)
             # Higher when:
@@ -202,7 +207,7 @@ class AdaptiveInferenceFramework:
             reliability_score[k : k + step] = r_t
 
             # 6. None-of-the-Above / Abstention Check
-            if r_t < self.reliability_threshold:
+            if (r_t < self.reliability_threshold) or (not has_informative_signal):
                 is_reliable_history[k : k + step] = False
                 # Downweight or reject warning score when unreliable
                 w_score = 0.0
@@ -213,12 +218,25 @@ class AdaptiveInferenceFramework:
             warning_score[k : k + step] = w_score
             weights_history[k : k + step] = w_k
 
-        # 7. Persistence Filter: alarm triggers only if warning_score >= threshold for P consecutive steps
+        # 7. Causal Multi-Step Persistence Filter
+        # An operational alarm is active if and only if warning_score >= alarm_threshold and is_reliable
+        # for at least persistence_steps consecutive evaluation steps.
+        alarm_active = np.zeros(n_obs, dtype=bool)
+        consecutive_count = 0
+        for k in range(self.window_size, n_obs, step):
+            if is_reliable_history[k] and warning_score[k] >= self.alarm_threshold:
+                consecutive_count += 1
+                if consecutive_count >= self.persistence_steps:
+                    alarm_active[k : k + step] = True
+            else:
+                consecutive_count = 0
+
         return {
             'warning_score': warning_score,
             'reliability_score': reliability_score,
             'weights': weights_history,
-            'is_reliable': is_reliable_history
+            'is_reliable': is_reliable_history,
+            'alarm_active': alarm_active
         }
 
 
