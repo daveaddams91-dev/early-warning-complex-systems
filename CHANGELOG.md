@@ -53,6 +53,15 @@ All notable changes, theoretical advances, empirical discoveries, and bug fixes 
 ### 7. Continuous Integration (CI)
 - Created `.github/workflows/ci.yml` running `pytest tests/ -v` on Python 3.10, 3.11, and 3.12 on all pushes and pull requests to `main`.
 - Created standardized `requirements.txt`.
-- Expanded test suite from 38 to **49 unit tests**, passing 100% locally in 12.4s.
+- Expanded test suite from 38 to **50 unit tests**, passing 100% locally.
 - Verified 100% compliance with KaTeX formatting rules (zero operatorname macros across all markdown files).
 - Integrated Author ORCID (0009-0004-7838-4064) across CITATION.cff, README.md, and FINAL_REPORT.md.
+
+### 8. Rigorous Primary-Source Bibliography Audit
+- Executed automated Crossref REST API verification across all citations in `REFERENCES.md`.
+- Disentangled the spliced entry #9 (Weinans et al.) into two verified entries: Weinans et al. 2019 (*J. R. Soc. Interface*, DOI `10.1098/rsif.2019.0629`) and Weinans et al. 2021 (*Sci. Rep.*, DOI `10.1038/s41598-021-87839-y`).
+- Corrected author list and title for entry #12 (Bury et al. 2021 *PNAS*, DOI `10.1073/pnas.2106140118`).
+- Fixed transposed DOI on entry #15 (Boettiger et al. 2013 *Theor. Ecol.*, DOI `10.1007/s12080-013-0192-6`).
+- Replaced mismatched radar DOI on entry #16 with genuine publication DOI for Ritchie & Sieber 2016 (*Chaos*, DOI `10.1063/1.4963012`).
+- Expanded bibliography to **24 fully verified, resolving citations** with zero dead links or hallucinated authors, audited in `docs/BIBLIOGRAPHY_AUDIT.md`.
+- Added regression test `tests/test_references.py` ensuring bibliography completeness and valid DOIs.

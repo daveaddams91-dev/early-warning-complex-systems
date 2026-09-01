@@ -236,5 +236,5 @@ Phase 4 transformed a standing scientific contradiction into the central theoret
 ---
 
 ## 22. References
-See **[`REFERENCES.md`](file:///C:/Users/davea/.gemini/antigravity/scratch/early-warning-complex-systems/REFERENCES.md)** for 18 peer-reviewed citations with exact DOIs and mathematical claim linkages.
+See **[`REFERENCES.md`](file:///C:/Users/davea/.gemini/antigravity/scratch/early-warning-complex-systems/REFERENCES.md)** for 24 peer-reviewed citations with exact DOIs and mathematical claim linkages.
 

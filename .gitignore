@@ -1,4 +1,4 @@
-﻿# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *.class
@@ -41,6 +41,7 @@ htmlcov/
 # IDE & OS files
 .idea/
 .vscode/
+.freebuff/
 *.swp
 *.swo
 *~

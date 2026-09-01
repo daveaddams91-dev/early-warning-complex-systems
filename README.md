@@ -1,7 +1,7 @@
 # Early-Warning Mathematics for Complex Systems
 
 [![CI](https://github.com/Raj123-0/early-warning-complex-systems/actions/workflows/ci.yml/badge.svg)](https://github.com/Raj123-0/early-warning-complex-systems/actions)
-[![Tests](https://img.shields.io/badge/pytest-49%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/pytest-50%20passed-brightgreen.svg)](tests/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0004--7838--4064-green.svg)](https://orcid.org/0009-0004-7838-4064)

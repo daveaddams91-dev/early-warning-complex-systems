@@ -1,4 +1,4 @@
-﻿# RESEARCH LOG & EXPERIMENTAL DIARY
+# RESEARCH LOG & EXPERIMENTAL DIARY
 
 ## Project: Early-Warning Mathematics for Complex Systems
 **Autonomous Research Agent**: Antigravity  
@@ -13,7 +13,7 @@
 - Created standard scientific directory hierarchy (`src/`, `tests/`, `experiments/`, `docs/`).
 
 ### [2026-09-01 00:33] — Phase 1 & 2: Literature Audit, Novelty & Research Blueprint
-- Authored `REFERENCES.md` containing 21 peer-reviewed papers with exact DOIs, years, authors, and specific claim linkages.
+- Authored `REFERENCES.md` containing 24 peer-reviewed papers with exact DOIs, years, authors, and specific claim linkages.
 - Authored `NOVELTY_AUDIT.md` contrasting our framework with Bury et al. (2021), Weinans et al. (2021), and Boettiger et al. (2012).
 - Authored `RESEARCH_BLUEPRINT.md` formalizing SDEs, continuous Lyapunov solver, non-leakage axioms, and 4 falsifiable hypotheses ($H_1$–$H_4$).
 
