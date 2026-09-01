@@ -1,0 +1,7 @@
+SNR_Condition,Best_Single_AUC,Fixed_Composite_AUC,Adaptive_Ensemble_AUC,Oracle_Upper_Bound_AUC,Oracle_Gap_G
+Clean_inf_dB,1.0,1.0,1.0,1.0,0.0
+SNR_25dB,1.0,1.0,1.0,1.0,0.0
+SNR_15dB,1.0,1.0,1.0,1.0,0.0
+SNR_5dB,1.0,1.0,1.0,1.0,0.0
+SNR_0dB,1.0,1.0,1.0,1.0,0.0
+SNR_minus5dB,1.0,1.0,1.0,1.0,0.0

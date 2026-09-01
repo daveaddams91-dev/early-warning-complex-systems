@@ -1,0 +1,3 @@
+Ensemble_Type,Effective_Diversity_K_eff,Genuine_Ramp_ROC_AUC,True_Alarm_Rate_Ramp,Adversarial_Shock_False_Alarm_Rate,Resistance_to_False_Consensus
+Redundant_Moment_Ensemble,2.7903059365607343,1.0,1.0,1.0,LOW (Vulnerable to False Consensus)
+Diverse_Complementary_Ensemble,2.1671011184084676,1.0,1.0,1.0,LOW (Vulnerable to False Consensus)

@@ -168,5 +168,16 @@ Mathematical indicators of critical slowing down provide powerful, statistically
 
 ---
 
-## 21. References
+## 21. Phase 4 Breakthrough: The Resolution of the Composite Contradiction
+
+Phase 4 transformed a standing scientific contradiction into the central theoretical contribution of the project:
+1. **The Noise Dilution Theorem**: We proved mathematically that unweighted averaging of uninformative indicators dilutes composite Signal-to-Noise Ratio by $\sqrt{K_0 / K}$, while averaging indicators with opposing trends (Variance increasing while Permutation Entropy decreases) causes catastrophic directional cancellation, collapsing Trajectory ROC-AUC from $1.0000$ to $0.3224$ (EXP-010, `PHASE4_DISCOVERY_REPORT.md`).
+2. **Spatial Mode Noise Averaging**: In multi-node networks, dominant eigenvector projection (PCA1) filters out independent sensor noise by a factor of $\sqrt{D}$, enabling `PCA1_Variance` to maintain $\text{ROC-AUC} = 1.0000$ at $\sigma_{\text{obs}} = 0.50$ where scalar variance collapses (`INDICATOR_REGIME_MAP.md`).
+3. **The Adaptive Early-Warning Inference Framework (AEWIF)**: We formulated an online framework that estimates $P(\text{indicator } i \text{ is informative} \mid X_{1:t})$, dynamically weights indicators state-dependently, and incorporates a mandatory **"None of the Above" Abstention Rejection State** ($W(t) = \text{UNRELIABLE}$) when reliability $R(t) < 0.25$, refusing to mislead operators under noise (`ADAPTIVE_FRAMEWORK.md`).
+4. **Information Diversity & False Consensus**: We proved that higher-order moments are collinear ($K_{\text{eff}} \approx 2.79$) and showed that abrupt non-collapsing shocks trigger adversarial false consensus across all energy moments, establishing that passive consensus cannot replace active probing (`INFORMATION_DIVERSITY.md`).
+
+---
+
+## 22. References
 See **[`REFERENCES.md`](file:///C:/Users/davea/.gemini/antigravity/scratch/early-warning-complex-systems/REFERENCES.md)** for 18 peer-reviewed citations with exact DOIs and mathematical claim linkages.
+
