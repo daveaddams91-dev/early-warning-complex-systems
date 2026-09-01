@@ -1,6 +1,6 @@
 # MATHEMATICAL AND STATISTICAL BOUNDARIES OF EARLY-WARNING INDICATORS FOR CRITICAL TRANSITIONS IN COMPLEX DYNAMICAL SYSTEMS
 
-**Author**: Rajveersinh Vishal Pardeshi  
+**Author**: Rajveersinh Vishal Pardeshi ([ORCID: 0009-0004-7838-4064](https://orcid.org/0009-0004-7838-4064))  
 **Repository**: [https://github.com/Raj123-0/early-warning-complex-systems](https://github.com/Raj123-0/early-warning-complex-systems)  
 **Stage**: Phase 3 Final Validated Research Manuscript  
 **Date**: September 2026  

@@ -4,6 +4,7 @@
 [![Tests](https://img.shields.io/badge/pytest-49%20passed-brightgreen.svg)](tests/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0004--7838--4064-green.svg)](https://orcid.org/0009-0004-7838-4064)
 [![Audit](https://img.shields.io/badge/Phase%204%20Discovery-Validated-blueviolet.svg)](PHASE4_CHECKPOINT.md)
 
 An open-source mathematical research framework and benchmark investigating whether statistical, physical, and information-theoretic indicators can reliably anticipate critical transitions and systemic collapse in complex dynamical systems.
@@ -87,7 +88,7 @@ python src/advancements/adaptive_inference_framework.py
 
 ## 👤 Author & Citation
 
-**Author**: Rajveersinh Vishal Pardeshi  
+**Author**: Rajveersinh Vishal Pardeshi ([ORCID: 0009-0004-7838-4064](https://orcid.org/0009-0004-7838-4064))  
 **Repository**: [https://github.com/Raj123-0/early-warning-complex-systems](https://github.com/Raj123-0/early-warning-complex-systems)  
 **License**: [MIT License](LICENSE)
 

@@ -55,3 +55,4 @@ All notable changes, theoretical advances, empirical discoveries, and bug fixes 
 - Created standardized `requirements.txt`.
 - Expanded test suite from 38 to **49 unit tests**, passing 100% locally in 12.4s.
 - Verified 100% compliance with KaTeX formatting rules (zero operatorname macros across all markdown files).
+- Integrated Author ORCID (0009-0004-7838-4064) across CITATION.cff, README.md, and FINAL_REPORT.md.
