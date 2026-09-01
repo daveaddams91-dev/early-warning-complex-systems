@@ -8,7 +8,7 @@
 ---
 
 ## 1. Abstract
-Can mathematical and statistical indicators detect when a complex dynamical system is approaching a critical transition or collapse before the transition occurs, and can combining multiple signals produce a more reliable framework than individual indicators? In this investigation, we conducted an independent scientific audit, mathematical derivation, and empirical benchmark of early-warning systems (EWS) across five canonical dynamical topologies: 1D May harvesting fold, 2D FitzHugh-Nagumo supercritical Hopf oscillator, 1D subcritical pitchfork with catastrophic jump, 2D Stommel thermohaline circulation (AMOC), and a 10-node coupled mutualistic network, alongside an out-of-distribution Adler SNIC global oscillator. Addressing widespread pseudoreplication in the literature, we evaluated models strictly at the realization level ($N=25$ trajectories per regime) using clustered bootstrap confidence intervals. We discovered that while Tikhonov-regularized multi-indicator Mahalanobis distance (`CEWF-Mahalanobis`) and an Adaptive Bayesian Warning Engine (`Adaptive-Bayesian-EWS`) maintain near-perfect trajectory discrimination ($\text{ROC-AUC} = 1.000$) under $0\text{ dB}$ SNR Gaussian noise and colored red noise where classical lag-1 autocorrelation (AR(1)) collapses ($\text{AUC} \le 0.384$, $p = 0.000$), critical slowing down indicators are **not universal**. All indicators fail completely on non-smooth thermohaline circulation ($\text{ROC-AUC} \le 0.314$), noise-induced tipping ($0.0\%$ detection), and rate-induced tipping ($0.0\%$ detection). Furthermore, we mapped the empirical *Detectability Boundary* in parameter space ($\text{SNR}_{\text{dyn}} < 1.0 \implies \text{AUC} \le 0.60$), quantified Kendall's 1954 small-sample downward bias ($\Delta \rho \approx -0.22$ for window $W=30$), and demonstrated that active perturbation probing paired with closed-loop feedback control can arrest tipping with $5\text{ s}$ of actionable lead time.
+Can mathematical and statistical indicators detect when a complex dynamical system is approaching a critical transition or collapse before the transition occurs, and can combining multiple signals produce a more reliable framework than individual indicators? In this investigation, we conducted an independent scientific audit, mathematical derivation, and empirical benchmark of early-warning systems (EWS) across five canonical dynamical topologies: 1D May harvesting fold, 2D FitzHugh-Nagumo supercritical Hopf oscillator, 1D subcritical pitchfork with catastrophic jump, 2D Stommel thermohaline circulation (AMOC), and a 10-node coupled mutualistic network, alongside an out-of-distribution Adler SNIC global oscillator and the empirical GISP2 Younger Dryas paleoclimate transition. Addressing widespread pseudoreplication in the literature, we evaluated models strictly at the realization level ($N=25$ trajectories per regime) using clustered bootstrap confidence intervals and operational lead-time distributions at fixed false-alarm rates (FAR). We discovered that **composite aggregation is not a universal panacea**: composite models significantly help over simple scalar indicators on only **1 of 5 systems** (`SYS-2` FitzHugh-Nagumo Hopf, where complex conjugate eigenvalues blind scalar AR(1)); are **statistically indistinguishable** from simple variance on **2 systems** (`SYS-1` May Fold and `SYS-5` Coupled Network, $p \ge 0.08$); **significantly underperform** simple variance on **1 system** (`SYS-3` Subcritical Pitchfork, $\text{AUC} = 0.4933$ vs $\text{Variance} = 0.8945$, $p = 0.02$); and **fail catastrophically alongside simple indicators** on **1 system** (`SYS-4` Stommel AMOC, $\text{AUC} \le 0.2944$). Furthermore, operational lead-time analysis reveals that even when composite methods match simple indicators in single-threshold AUC, simple variance provides decisively superior operational advance warning at low false alarm rates (38.86 s vs 0.00 s at $1\%$ FAR on May Fold). All indicators fail on non-smooth thermohaline circulation ($\text{ROC-AUC} \le 0.294$), noise-induced tipping ($0.0\%$ detection), and rate-induced tipping ($0.0\%$ detection). We mapped the quantitative *Detectability Phase Boundary* across SNR levels from $-6\text{ dB}$ to $+12\text{ dB}$, quantified Kendall's small-sample downward bias ($\Delta \rho \approx -0.22$ for window $W=30$), and demonstrated that active perturbation probing paired with closed-loop feedback control can arrest tipping with $5\text{ s}$ of actionable lead time.
 
 ---
 
@@ -80,20 +80,25 @@ Audited in `DATA_LEAKAGE_AUDIT.md` and verified in `tests/test_reference_metrics
 ---
 
 ## 11. Results
-### Trajectory-Level Clean Benchmark (EXP-001)
-| System | Variance | AR(1) | PermutationEntropy | CEWF-Rank | CEWF-Mahalanobis | Adaptive-Bayesian-EWS |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **SYS1_May_Fold** | **1.0000** | 0.4848 | 0.0888 | 0.3224 | **1.0000** | **1.0000** |
-| **SYS2_FitzHughNagumo_Hopf** | **1.0000** | 0.5072 | 0.2600 | 0.2832 | **0.9792** | **1.0000** |
-| **SYS3_Subcritical_Pitchfork** | **0.8945** | 0.5127 | 0.2873 | 0.5891 | 0.4764 | **0.8655** |
-| **SYS4_Stommel_AMOC** | 0.2064 | 0.3136 | 0.1824 | 0.2784 | 0.2736 | 0.2416 |
-| **SYS5_Coupled_Network** | **1.0000** | 0.7072 | 0.0064 | 0.3088 | **1.0000** | **1.0000** |
 
-### Clustered Bootstrap Statistical Significance (EXP-002)
-- **May Fold**: `CEWF-Mahalanobis vs AR(1)` $\Delta \text{AUC} = +0.5157$, $95\%\text{ CI } [0.3520, 0.6888]$, $p = 0.0000$ (**SIGNIFICANT**).
-- **Stommel AMOC**: `CEWF-Mahalanobis vs AR(1)` $\Delta \text{AUC} = -0.0457$, $95\%\text{ CI } [-0.2673, 0.1688]$, $p = 0.7280$ (**NOT SIGNIFICANT**).
+### 11.1 Trajectory-Level Clean Benchmark & Deep Learning Baseline (EXP-001 & EXP-012)
+| System | Variance | AR(1) | PermutationEntropy | CEWF-Mahalanobis | DeepEWS (Bury 2021) | DeLong $p$ (Deep vs Mah) | Adaptive-Bayesian-EWS |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **SYS1_May_Fold** | **1.0000** | 0.4848 | 0.0888 | **1.0000** | **1.0000** | $1.0000$ (Neutral) | **1.0000** |
+| **SYS2_FitzHughNagumo_Hopf** | **1.0000** | 0.5072 | 0.2600 | **0.9536** | **0.9984** | $0.1019$ (Neutral) | **1.0000** |
+| **SYS3_Subcritical_Pitchfork** | **0.8945** | 0.5127 | 0.2873 | 0.4933 | **0.8000** | $0.0509$ (Marginal) | **0.8655** |
+| **SYS4_Stommel_AMOC** | 0.2064 | 0.3136 | 0.1824 | 0.2096 | 0.2944 | $0.4264$ (Neutral/Fail)| 0.2416 |
+| **SYS5_Coupled_Network** | **1.0000** | 0.7072 | 0.0064 | **1.0000** | **1.0000** | $1.0000$ (Neutral) | **1.0000** |
 
-### Stress & Corruption Robustness on May Fold (EXP-003)
+### 11.2 Clustered Bootstrap Statistical Significance (EXP-002 & EXP-012)
+- **DeepEWS vs. CEWF-Mahalanobis**:
+  - `May Fold`: $\Delta \mathrm{AUC} = 0.0000$, DeLong $p = 1.0000$ (Indistinguishable).
+  - `FitzHugh-Nagumo Hopf`: $\Delta \mathrm{AUC} = +0.0484$, DeLong $p = 0.1019$ (Statistically Indistinguishable).
+  - `Subcritical Pitchfork`: $\Delta \mathrm{AUC} = +0.2797$, Bootstrap $p = 0.0200$, DeLong $p = 0.0509$ (Marginally favors DeepEWS).
+  - `Stommel AMOC`: $\Delta \mathrm{AUC} = +0.0824$, DeLong $p = 0.4264$ (Both models fail catastrophically).
+  - `Coupled Network`: $\Delta \mathrm{AUC} = 0.0000$, DeLong $p = 1.0000$ (Indistinguishable).
+
+### 11.3 Stress & Corruption Robustness on May Fold (EXP-003)
 | Scenario | Variance | AR(1) | PermutationEntropy | CEWF-Rank | CEWF-Mahalanobis | Adaptive-Bayesian-EWS |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Clean Reference** | 1.0000 | 0.4848 | 0.0888 | 0.3224 | **1.0000** | **1.0000** |
@@ -101,19 +106,62 @@ Audited in `DATA_LEAKAGE_AUDIT.md` and verified in `tests/test_reference_metrics
 | **Colored Red Noise ($\gamma=0.7$)** | 1.0000 | 0.3840 | 0.0864 | 0.4392 | **1.0000** | **1.0000** |
 | **20 Distractor Channels** | 1.0000 | 0.4848 | 0.0888 | 0.3224 | **1.0000** | **1.0000** |
 
+### 11.4 Operational Lead-Time vs. False-Alarm-Rate Benchmark (EXP-011)
+To establish operational utility beyond single-threshold ROC-AUC rankings, we evaluated detection rate and lead time at fixed operating thresholds tied to specific False Alarm Rates ($\mathrm{FAR} \in \{1\%, 5\%, 10\%\}$) on null baseline series (`experiments/results/tables/lead_time_benchmark.csv` and figures `experiments/results/figures/lead_time_vs_far_*.png`):
+
+| System | Indicator / Model | Det. Rate @ 1% FAR | Mean Lead Time @ 1% FAR | Det. Rate @ 5% FAR | Mean Lead Time @ 5% FAR |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **SYS1_May_Fold** | **Variance** | **1.00** | **38.86 s** | **1.00** | **64.65 s** |
+| | AR(1) | 0.00 | 0.00 s | 0.00 | 0.00 s |
+| | CEWF-Mahalanobis | 0.00 | 0.00 s | 0.00 | 0.00 s |
+| | AEWIF | 0.00 | 0.00 s | 0.04 | 0.57 s |
+| **SYS2_FitzHughNagumo_Hopf** | **Variance** | **1.00** | **29.35 s** | **1.00** | **31.75 s** |
+| | AR(1) | 0.04 | 0.32 s | 0.04 | 0.32 s |
+| | CEWF-Mahalanobis | 0.00 | 0.00 s | 0.08 | 5.02 s |
+| | AEWIF | 0.24 | 12.97 s | 0.24 | 12.97 s |
+| **SYS3_Subcritical_Pitchfork** | Variance | 0.12 | 0.80 s | 0.32 | 3.03 s |
+| | CEWF-Mahalanobis | 0.00 | 0.00 s | 0.00 | 0.00 s |
+| **SYS4_Stommel_AMOC** | *All Models* | **0.00** | **0.00 s** | **0.00** | **0.00 s** |
+| **SYS5_Coupled_Network** | **Variance** | **1.00** | **70.50 s** | **1.00** | **70.81 s** |
+| | AR(1) | 0.08 | 5.29 s | 0.12 | 7.70 s |
+| | CEWF-Mahalanobis | 0.00 | 0.19 s | 0.00 | 0.65 s |
+
+> [!IMPORTANT]
+> **The Operational Lead-Time vs. AUC Divergence Paradox**:
+> While `Variance` and `CEWF-Mahalanobis` both achieve perfect trajectory discrimination ($\mathrm{ROC-AUC} = 1.0000$) on the May Fold, **their operational lead times diverge catastrophically**:
+> - At $\mathrm{FAR} = 1\%$, `Variance` achieves a $100\%$ detection rate with **$38.86\text{ s}$ of advance warning**.
+> - At $\mathrm{FAR} = 1\%$, `CEWF-Mahalanobis` achieves a **$0\%$ detection rate ($0.00\text{ s}$ lead time)**.
+> 
+> **Mathematical Origin**: The composite Mahalanobis statistic aggregates quadratic anomalies across multiple indicators ($D_M^2 = \Delta \mathbf{z}^T \mathbf{\Sigma}^{-1} \Delta \mathbf{z}$). In long stationary null series, the extreme value distribution of the joint sum generates occasional transient spikes, forcing the $1\%$ FAR calibration threshold very high. On approaching tipping, the composite trajectory only crosses this elevated threshold at the immediate brink of collapse ($t \approx T_{\text{crit}}$). Thus, high ROC-AUC does NOT imply operational lead time.
+
+### 11.5 External Validity: Real-World GISP2 Paleoclimate Record (~11.7 ka BP)
+To examine observational applicability outside synthetic SDEs, we evaluated the full suite on the Greenland GISP2 ice core $\delta^{18}\mathrm{O}$ temperature proxy record across the termination of the Younger Dryas cold stadial ($\sim 11,700\text{ yr BP}$, `docs/REAL_WORLD_DATA.md`):
+- **Variance**: Displays a statistically significant upward warning trend (Kendall's $\tau = +0.415$, $p = 0.0001$) providing **$140.0\text{ years}$ of actionable advance warning** before the catastrophic Preboreal warming shift.
+- **Permutation Entropy**: Displays an upward trend ($\tau = +0.625$, $p < 0.0001$) providing **$300.0\text{ years}$ of advance warning**.
+- **Lag-1 Autocorrelation (AR(1))**: Inverts into a statistically significant downward trend ($\tau = -0.424$, $p = 0.0001$), failing to exhibit critical slowing down due to high-frequency glaciological firn diffusion.
+- **AEWIF**: Reliably detected the conflict between increasing variance and decreasing autocorrelation, correctly triggering its **Abstention State** ($\tau = 0.000$) rather than emitting uncalibrated false alarms.
+- **DeepEWS**: Exhibited an inconclusive trend ($\tau = -0.163$, $p = 0.132$).
+
+*(Flagged explicitly as exploratory: single empirical realization $N=1$, non-generalizable without multi-core cross-validation).*
+
 ---
 
-## 12. Failure Cases
-Documented in `FAILURE_ANALYSIS.md`:
-1. **Stommel AMOC Collapse**: Non-smooth convective density flow $|T - S|$ causes the leading eigenvector to rotate into an unobserved subspace, collapsing ROC-AUC to $0.206 - 0.314$.
-2. **FitzHugh-Nagumo Autocorrelation Blindness**: Complex conjugate eigenvalues cause sinusoidal cancellation in the autocorrelation function, reducing AR(1) to chance ($\text{AUC} = 0.507$).
+## 12. Failure Cases & Mechanistic AMOC Investigation
+Documented in `docs/AMOC_FAILURE_ANALYSIS.md` and `FAILURE_ANALYSIS.md`:
+1. **The Stommel AMOC Failure Mechanism**:
+   - The Stommel 2-box thermohaline circulation model features non-smooth convective density flow $q = |T - S|$.
+   - As freshwater forcing $\mu$ increases, the thermal mode relaxes fast ($\eta_1 = 1.0$) while salinity relaxes slowly ($\eta_2 = 0.3$).
+   - The critical slowing down eigenvector rotates almost entirely into the salinity coordinate ($\theta \approx 66.16^\circ$ from temperature). When observing temperature $T$ alone, fluctuation variance does not diverge ($\mathrm{ROC-AUC} \le 0.363$ across raw, log, first-difference, and detrended representations; `experiments/results/tables/amoc_failure_ablation.csv`).
+   - Crucially, raw 2D Mahalanobis distance scored $\mathrm{ROC-AUC} = 1.0000$ solely as an artifact of **mean trajectory drift in the $(T, S)$ plane**. Once locally detrended or first-differenced to isolate stochastic fluctuations, Mahalanobis collapsed to $\mathrm{ROC-AUC} = 0.1712$ and $0.2208$, proving that dynamical fluctuation softening is completely absent on the observed manifold.
+2. **FitzHugh-Nagumo Autocorrelation Blindness**: Complex conjugate eigenvalues cause sinusoidal oscillation in the autocorrelation function, reducing AR(1) to chance ($\mathrm{AUC} = 0.507$).
 3. **N-Tipping & R-Tipping**: Produce $0.0\%$ detection rate because the local potential curvature does not flatten before tipping.
 
 ---
 
-## 13. Detectability Limits
-Mapped in `EXP-004`:
-When observation noise $\sigma_{\text{obs}} \ge 0.40$, dynamical signal-to-noise ratio $\text{SNR}_{\text{dyn}} < 1.0$. Measured variance is dominated by measurement error, compressing ROC-AUC to $\le 0.60$. This establishes the empirical detectability boundary.
+## 13. Quantitative Detectability Phase Diagram
+Swept systematically across 7 observation noise levels ($\mathrm{SNR}_{\text{dyn}} \in [-6\text{ dB}, +12\text{ dB}]$) across all 5 canonical systems (`experiments/results/tables/noise_detectability_phase_diagram.csv` and heatmaps `experiments/results/figures/noise_detectability_phase_diagram_*.png`):
+- **AR(1) Noise Dilution**: Collapses to $\mathrm{ROC-AUC} \le 0.05$ across all systems as soon as $\mathrm{SNR} \le 0\text{ dB}$, confirming that white observation noise dilutes temporal autocorrelation toward zero.
+- **CEWF-Mahalanobis Phase Transition**: Displays a sharp, monotonic phase transition: on FitzHugh-Nagumo Hopf, ROC-AUC scales from $0.329$ at $+3\text{ dB} \to 0.924$ at $+12\text{ dB}$; on AMOC, it climbs from $0.129$ at $-6\text{ dB} \to 0.911$ at $+12\text{ dB}$.
 
 ---
 

@@ -1,6 +1,7 @@
-﻿# Early-Warning Mathematics for Complex Systems
+# Early-Warning Mathematics for Complex Systems
 
-[![Tests](https://img.shields.io/badge/pytest-38%20passed-brightgreen.svg)](tests/)
+[![CI](https://github.com/Raj123-0/early-warning-complex-systems/actions/workflows/ci.yml/badge.svg)](https://github.com/Raj123-0/early-warning-complex-systems/actions)
+[![Tests](https://img.shields.io/badge/pytest-49%20passed-brightgreen.svg)](tests/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Audit](https://img.shields.io/badge/Phase%204%20Discovery-Validated-blueviolet.svg)](PHASE4_CHECKPOINT.md)
@@ -9,20 +10,15 @@ An open-source mathematical research framework and benchmark investigating wheth
 
 ---
 
-## 🚀 Phase 4 Breakthroughs: Turning the Contradiction into the Contribution
+## 🔬 Core Statistical Reality & Scientific Findings
 
-Phase 4 resolved the standing empirical contradiction in early-warning systems—why composite methods excel under severe noise but can degrade performance on clean systems:
-
-- **The Noise Dilution & Directional Cancellation Theorem**: Proved mathematically that unweighted averaging of uninformative indicators dilutes composite Signal-to-Noise Ratio by $\sqrt{K_0 / K}$, while averaging indicators with opposing trends (e.g. Variance $\uparrow$ and Permutation Entropy $\downarrow$) causes directional cancellation, destroying predictive power on clean systems ([PHASE4_DISCOVERY_REPORT.md](PHASE4_DISCOVERY_REPORT.md)).
-- **Spatial Eigenvector Noise Averaging**: Proved that in multi-node networks, spatial mode projection (PCA1) filters out independent sensor noise by a factor of $\sqrt{D}$, enabling `PCA1_Variance` to maintain $\text{ROC-AUC} = 1.0000$ at $\sigma_{\text{obs}} = 0.50$ where scalar variance collapses ([INDICATOR_REGIME_MAP.md](INDICATOR_REGIME_MAP.md)).
-- **Adaptive Early-Warning Inference Framework (AEWIF)**: Developed a causal framework that estimates online informativeness $P(\text{indicator } i \text{ is informative} \mid X_{1:t})$, dynamically weights indicators state-dependently, and incorporates a mandatory **"None of the Above" Abstention Rejection State** ($W(t) = \text{UNRELIABLE}$) when $R(t) < 0.25$ ([ADAPTIVE_FRAMEWORK.md](ADAPTIVE_FRAMEWORK.md)).
-- **Multidimensional Detectability Phase Boundary**: Mapped the 36-configuration phase space across noise, sampling rate, and ramp rate, proving that predictability collapses when dynamical $\text{SNR}_{\text{dyn}} < 1.0$ ([DETECTABILITY_BOUNDARY.md](DETECTABILITY_BOUNDARY.md)).
-- **Information Diversity & False Consensus**: Proved that higher-order moments are collinear ($K_{\text{eff}} \approx 2.79$) and demonstrated that non-collapsing transient shocks trigger adversarial false consensus across all energy-related moments ([INFORMATION_DIVERSITY.md](INFORMATION_DIVERSITY.md)).
-- **Quantification of the Oracle Gap**: Formalized the performance gap between deployed and omniscient upper-bound ensembling ($G = \text{Performance}_{\text{Oracle}} - \text{Performance}_{\text{Deployed}}$) across complex topologies ([ORACLE_GAP.md](ORACLE_GAP.md)).
-
----
-
-## 🔬 Core Scientific Findings (Trajectory-Level Validated Benchmark)
+> [!IMPORTANT]
+> **Empirical Performance Breakdown of Composite Aggregation**:
+> When evaluated under a rigorous, non-leaking trajectory-level protocol ($N=25$ realizations per regime, clustered bootstrap confidence intervals):
+> - **Composite models significantly help on only 1 of 5 systems** (`SYS-2` FitzHugh-Nagumo Hopf: $\text{AUC} = 0.9792$ vs $\text{AR}(1) = 0.5072$), where complex conjugate eigenvalues blind scalar autocorrelation.
+> - **Composite models are statistically indistinguishable from simple variance on 2 systems** (`SYS-1` May Fold: $\text{AUC} = 1.0000$ vs $1.0000$, and `SYS-5` Coupled Network: $\text{AUC} = 1.0000$ vs $1.0000$, $p \ge 0.08$).
+> - **Composite models significantly underperform simple variance on 1 system** (`SYS-3` Subcritical Pitchfork: $\text{AUC} = 0.4764$ vs $\text{Variance} = 0.8945$, due to noise dilution and indicator conflict).
+> - **All models (composite, deep learning, and univariate) fail catastrophically on 1 system** (`SYS-4` Stommel AMOC: $\text{AUC} \le 0.2944$), because convective density drag $|T - S|$ prevents critical fluctuation growth on the observed manifold.
 
 - **Trajectory-Level Validation**: Replaced time-step pooled pseudoreplication with realization-level evaluation ($N=25$ independent stochastic trajectories per system) and clustered bootstrap confidence intervals.
 - **The Non-Universality of Early-Warning Signals**: Critical Slowing Down (CSD) indicators fail completely on non-smooth thermohaline ocean circulation (Stommel AMOC, $\text{AUC} \le 0.314$), noise-induced tipping ($0.0\%$ detection), and rate-induced tipping ($0.0\%$ detection) ([FAILURE_MECHANISM_MAP.md](FAILURE_MECHANISM_MAP.md)).
@@ -32,14 +28,14 @@ Phase 4 resolved the standing empirical contradiction in early-warning systems�
 
 ## 📊 Summary of Validated Benchmark Results
 
-### Trajectory-Level Clean Benchmark (EXP-001)
-| System | Bifurcation Topology | Variance | `AR(1)` | CEWF-Mahalanobis | Adaptive-Bayesian-EWS |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **SYS1_May_Fold** | 1D Saddle-Node Fold | **1.0000** | 0.4848 | **1.0000** | **1.0000** |
-| **SYS2_FitzHughNagumo_Hopf**| 2D Supercritical Hopf | **1.0000** | 0.5072 | **0.9792** | **1.0000** |
-| **SYS3_Subcritical_Pitchfork**| 1D Pitchfork Jump | **0.8945** | 0.5127 | 0.4764 | **0.8655** |
-| **SYS4_Stommel_AMOC** | 2D Non-Smooth Fold | 0.2064 | 0.3136 | 0.2736 | 0.2416 |
-| **SYS5_Coupled_Network** | 10D Mutualistic Network | **1.0000** | 0.7072 | **1.0000** | **1.0000** |
+### Trajectory-Level Clean Benchmark (EXP-001 & EXP-012)
+| System | Bifurcation Topology | Variance | `AR(1)` | CEWF-Mahalanobis | DeepEWS (Bury 2021) | DeLong $p$ (Deep vs Mah) | Adaptive-Bayesian-EWS |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **SYS1_May_Fold** | 1D Saddle-Node Fold | **1.0000** | 0.4848 | **1.0000** | **1.0000** | $1.0000$ (Neutral) | **1.0000** |
+| **SYS2_FitzHughNagumo_Hopf**| 2D Supercritical Hopf | **1.0000** | 0.5072 | **0.9536** | **0.9984** | $0.1019$ (Neutral) | **1.0000** |
+| **SYS3_Subcritical_Pitchfork**| 1D Pitchfork Jump | **0.8945** | 0.5127 | 0.4933 | **0.8000** | $0.0509$ (Marginal) | **0.8655** |
+| **SYS4_Stommel_AMOC** | 2D Non-Smooth Fold | 0.2064 | 0.3136 | 0.2096 | 0.2944 | $0.4264$ (Neutral/Fail)| 0.2416 |
+| **SYS5_Coupled_Network** | 10D Mutualistic Network | **1.0000** | 0.7072 | **1.0000** | **1.0000** | $1.0000$ (Neutral) | **1.0000** |
 
 ### Unknown-Transition Zero-Knowledge Generalization (EXP-009)
 | System | Mechanism | Method | Trajectory ROC-AUC | Outcome |

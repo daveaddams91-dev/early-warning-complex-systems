@@ -23,8 +23,11 @@
 
 ## 2. Observational & Sensor Limitations
 
-1. **The Detectability Phase Boundary ($\text{SNR}_{\text{dyn}} < 1.0$)**:
-   - When measurement noise $\sigma_{\text{obs}} \ge 0.20$, the observation noise variance completely masks dynamical critical slowing down fluctuations ($\text{ROC-AUC} \le 0.60$, EXP-004). Statistical early warning is fundamentally impossible unless measurement noise is reduced below the dynamical variance scale.
+1. **The Quantitative Detectability Phase Boundary ($\text{SNR}_{\text{dyn}}$ Sweep from $-6\text{ dB}$ to $+12\text{ dB}$)**:
+   - Evaluated across a 7-point SNR grid across all 5 canonical systems (`experiments/results/tables/noise_detectability_phase_diagram.csv` and heatmaps `experiments/results/figures/noise_detectability_phase_diagram_*.png`):
+     - **Lag-1 Autocorrelation (AR(1))** suffers catastrophic noise dilution: as soon as observation noise is added ($\text{SNR} \le 0\text{ dB}$), AR(1) collapses to $\text{ROC-AUC} \le 0.05$ across all systems because white observation increments $\epsilon_t$ force the empirical autocorrelation $\frac{\mathrm{Cov}(x_t, x_{t-1})}{\mathrm{Var}(x_t) + \sigma_{\text{obs}}^2} \to 0$.
+     - **CEWF-Mahalanobis** exhibits a sharp phase transition: on FitzHugh-Nagumo Hopf, performance scales monotonically from $\text{ROC-AUC} = 0.329$ at $+3\text{ dB} \to 0.924$ at $+12\text{ dB}$; on Stommel AMOC, it transitions from $0.129$ at $-6\text{ dB} \to 0.911$ at $+12\text{ dB}$.
+     - Statistical early warning via correlation tracking is fundamentally impossible once observation noise exceeds the internal dynamical fluctuations ($\text{SNR}_{\text{dyn}} < 1.0$).
 2. **Hidden Variables & Partial Observability**:
    - In coupled multi-dimensional systems where the unstable manifold is localized to unobserved state variables (e.g. unobserved species in an ecological web or deep ocean salinity), projections onto observed coordinates remain linear and calm until instantaneous collapse occurs ($0.0\%$ detection rate, EXP-007). Full state observability or leading eigenvector projection is a strict prerequisite.
 3. **Sensor Noise Coloration**:

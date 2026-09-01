@@ -1,4 +1,4 @@
-﻿"""
+"""
 Multi-Indicator Mahalanobis Anomaly Distance Model (CEWF-Mahalanobis).
 """
 
@@ -69,4 +69,12 @@ class MultiIndicatorMahalanobisModel(BaseEarlyWarningModel):
         diff = features[valid_mask] - self.ref_mean
         dist_sq = np.sum((diff @ self.inv_cov) * diff, axis=1)
         scores[valid_mask] = np.sqrt(np.maximum(dist_sq, 0.0))
+        
+        # Forward-fill to maintain continuous series across non-evaluated step intervals
+        valid_indices = np.where(valid_mask)[0]
+        for i in range(len(valid_indices)):
+            k = valid_indices[i]
+            next_k = valid_indices[i + 1] if i + 1 < len(valid_indices) else n_obs
+            scores[k : next_k] = scores[k]
+            
         return scores
