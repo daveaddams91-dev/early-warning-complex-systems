@@ -1,4 +1,4 @@
-﻿# Early-Warning Mathematics for Complex Systems
+# Early-Warning Mathematics for Complex Systems
 
 [![Tests](https://img.shields.io/badge/pytest-34%20passed-brightgreen.svg)](tests/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -12,7 +12,7 @@ An open-source mathematical research framework and benchmark investigating wheth
 ## 🔬 Core Scientific Findings (Phase 3 Validated Benchmark)
 
 - **Trajectory-Level Validation**: Replaced time-step pooled pseudoreplication with realization-level evaluation ($N=25$ independent stochastic trajectories per system) and clustered bootstrap confidence intervals.
-- **Composite Model Superiority**: Tikhonov-regularized multi-indicator Mahalanobis distance (`CEWF-Mahalanobis`) and Adaptive Bayesian Warning Engine (`Adaptive-Bayesian-EWS`) achieve trajectory-level $\text{ROC-AUC} = 1.000$ under $0\text{ dB}$ SNR Gaussian noise and colored red noise, where classical scalar $\operatorname{AR}(1)$ collapses to $\text{AUC} \le 0.384$ ($p = 0.0000$, EXP-002, EXP-003).
+- **Composite Model Superiority**: Tikhonov-regularized multi-indicator Mahalanobis distance (`CEWF-Mahalanobis`) and Adaptive Bayesian Warning Engine (`Adaptive-Bayesian-EWS`) achieve trajectory-level $\text{ROC-AUC} = 1.000$ under $0\text{ dB}$ SNR Gaussian noise and colored red noise, where classical scalar `AR(1)` collapses to $\text{AUC} \le 0.384$ ($p = 0.0000$, EXP-002, EXP-003).
 - **The Non-Universality of Early-Warning Signals**: Critical Slowing Down (CSD) indicators fail completely on non-smooth thermohaline ocean circulation (Stommel AMOC, $\text{AUC} \le 0.314$), noise-induced tipping ($0.0\%$ detection), and rate-induced tipping ($0.0\%$ detection).
 - **The Detectability Phase Boundary**: Mapped the parameter space boundary where dynamical $\text{SNR} < 1.0$ ($\sigma_{\text{obs}} \ge 0.40$), rendering statistical warning fundamentally impossible regardless of sliding-window length (EXP-004).
 - **Active Probing & Control**: Active test perturbations directly estimate local eigenvalues $\hat{\kappa}$ without sliding-window delays, enabling closed-loop feedback control to arrest tipping up to $5\text{ s}$ before bifurcation (EXP-006).

@@ -1,4 +1,4 @@
-﻿# SYSTEM BOUNDARY CONDITIONS & SCIENTIFIC LIMITATIONS
+# SYSTEM BOUNDARY CONDITIONS & SCIENTIFIC LIMITATIONS
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 3 Definitive Limitations Audit  
@@ -10,11 +10,11 @@
 ## 1. Fundamental Mathematical Limitations
 
 1. **Non-Smooth & Discontinuous Dynamics**:
-   - Critical slowing down (CSD) theory is derived from the Taylor expansion of smooth vector fields near non-hyperbolic fixed points ($J \mathbf{v} = \lambda \mathbf{v}, \operatorname{Re}(\lambda) \to 0^-$).
+   - Critical slowing down (CSD) theory is derived from the Taylor expansion of smooth vector fields near non-hyperbolic fixed points ($J \mathbf{v} = \lambda \mathbf{v}, \mathrm{Re}(\lambda) \to 0^-$).
    - In systems with piecewise-smooth or non-smooth vector fields—such as the Stommel ocean model ($\dot{T} \sim |T - S| T$) or stick-slip friction—the derivative $d|q|/dq$ is discontinuous. The local potential well does not flatten in a classical quadratic fashion, causing variance and autocorrelation divergence to fail completely ($\text{ROC-AUC} \le 0.490$, EXP-001).
 2. **Hopf & Complex Conjugate Bifurcations**:
    - At a supercritical Hopf bifurcation, the Jacobian eigenvalues cross the imaginary axis as a complex conjugate pair $\alpha \pm i \omega$.
-   - Because the autocorrelation function oscillates ($\rho(\tau) = e^{\alpha \tau} \cos(\omega \tau)$), scalar lag-1 autocorrelation $\operatorname{AR}(1)$ at fixed sampling lag $\Delta t$ can be zero or negative even when the system is on the verge of instability ($\text{AUC} = 0.507$, EXP-001).
+   - Because the autocorrelation function oscillates ($\rho(\tau) = e^{\alpha \tau} \cos(\omega \tau)$), scalar lag-1 autocorrelation AR(1) at fixed sampling lag $\Delta t$ can be zero or negative even when the system is on the verge of instability ($\text{AUC} = 0.507$, EXP-001).
 3. **Noise-Induced (N-Tipping) & Rate-Induced (R-Tipping) Blindness**:
    - **N-Tipping**: When transitions occur via stochastic basin hopping across a deep barrier, eigenvalues remain strongly negative. CSD indicators exhibit zero prior warning ($0.0\%$ detection rate, EXP-007).
    - **R-Tipping**: When parameter drift rate $d\mu/dt$ exceeds the internal relaxation rate, the state escapes because it cannot track the moving equilibrium, not because eigenvalues vanish. CSD indicators cannot predict R-tipping ($0.0\%$ detection rate, EXP-007).

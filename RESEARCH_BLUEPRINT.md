@@ -1,4 +1,4 @@
-﻿# Research Blueprint: Early-Warning Mathematics for Complex Systems
+# Research Blueprint: Early-Warning Mathematics for Complex Systems
 
 ## 1. Problem Formulation and Mathematical Definition
 
@@ -22,7 +22,7 @@ $$W_k = \mathcal{A}(\{\mathbf{y}_1, \mathbf{y}_2, \dots, \mathbf{y}_k\})$$
 ### 1.3. Definition of Collapse and Critical Transition
 Let $\mathcal{B}(\boldsymbol{\mu}) \subset \mathcal{X}$ denote the basin of attraction of a desirable/operational steady state $\mathbf{x}^*(\boldsymbol{\mu})$.
 A **Critical Transition (Collapse)** occurs at time $T_{\text{crit}}$ if:
-1. **Bifurcation-Induced (B-tipping):** For $\boldsymbol{\mu} \to \boldsymbol{\mu}_{\text{crit}}$, the real part of the leading eigenvalue $\lambda_{\max}(\mathbf{J})$ of the Jacobian $\mathbf{J} = \left.\frac{\partial \mathbf{f}}{\partial \mathbf{x}}\right|_{\mathbf{x}^*}$ crosses zero ($\operatorname{Re}(\lambda_{\max}) \to 0^-$), causing $\mathbf{x}^*(\boldsymbol{\mu})$ to undergo a codimension-1 bifurcation (Fold, Hopf, Transcritical, Pitchfork), and the state trajectory rapidly transitions to an alternative attractor or divergent state $\mathbf{x}_{\text{alt}} \notin \mathcal{B}_0$.
+1. **Bifurcation-Induced (B-tipping):** For $\boldsymbol{\mu} \to \boldsymbol{\mu}_{\text{crit}}$, the real part of the leading eigenvalue $\lambda_{\max}(\mathbf{J})$ of the Jacobian $\mathbf{J} = \left.\frac{\partial \mathbf{f}}{\partial \mathbf{x}}\right|_{\mathbf{x}^*}$ crosses zero ($\mathrm{Re}(\lambda_{\max}) \to 0^-$), causing $\mathbf{x}^*(\boldsymbol{\mu})$ to undergo a codimension-1 bifurcation (Fold, Hopf, Transcritical, Pitchfork), and the state trajectory rapidly transitions to an alternative attractor or divergent state $\mathbf{x}_{\text{alt}} \notin \mathcal{B}_0$.
 2. **Noise-Induced (N-tipping):** A large stochastic fluctuation $\int \mathbf{G}\mathrm{d}\mathbf{W}$ forces $\mathbf{x}(t)$ across the separatrix $\partial \mathcal{B}(\boldsymbol{\mu})$ at stationary $\boldsymbol{\mu} < \boldsymbol{\mu}_{\text{crit}}$.
 3. **Rate-Induced (R-tipping):** The parameter drift speed $\|\dot{\boldsymbol{\mu}}\|$ exceeds the maximum contraction rate of the basin boundary, forcing $\mathbf{x}(t)$ out of the moving basin.
 
@@ -59,10 +59,10 @@ Let $\mathbf{z}_w = \{y_{k-w+1}, \dots, y_k\}$ be the sliding window of length $
 ### 4.1. Statistical Indicators
 1. **Variance ($\sigma^2$):**
    $$\sigma^2_k = \frac{1}{w-1} \sum_{j=1}^w (y_{k-w+j} - \bar{y}_w)^2$$
-   *Theoretical scaling:* $\sigma^2 \propto \frac{\sigma_{\text{noise}}^2}{2 |\operatorname{Re}(\lambda_{\max})|} \to \infty$ as $\lambda_{\max} \to 0$.
+   *Theoretical scaling:* $\sigma^2 \propto \frac{\sigma_{\text{noise}}^2}{2 |\mathrm{Re}(\lambda_{\max})|} \to \infty$ as $\lambda_{\max} \to 0$.
 2. **Lag-1 Autocorrelation ($AR(1)$ / $\rho_1$):**
    $$\rho_{1,k} = \frac{\sum_{j=1}^{w-1} (y_{k-w+j} - \bar{y}_w)(y_{k-w+j+1} - \bar{y}_w)}{\sum_{j=1}^w (y_{k-w+j} - \bar{y}_w)^2}$$
-   *Theoretical scaling:* $\rho_1 = e^{-|\operatorname{Re}(\lambda_{\max})| \Delta t} \to 1$ as $\lambda_{\max} \to 0$.
+   *Theoretical scaling:* $\rho_1 = e^{-|\mathrm{Re}(\lambda_{\max})| \Delta t} \to 1$ as $\lambda_{\max} \to 0$.
 3. **Skewness ($\gamma_1$):**
    $$\gamma_{1,k} = \frac{\frac{1}{w}\sum_{j=1}^w (y_{k-w+j} - \bar{y}_w)^3}{\sigma_k^3}$$
    *Theoretical scaling:* Asymmetry increases near asymmetric fold potential wells.

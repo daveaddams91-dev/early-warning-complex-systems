@@ -1,4 +1,4 @@
-﻿# PHASE 2 ADVANCED RESEARCH DISCOVERIES & GAME-CHANGERS
+# PHASE 2 ADVANCED RESEARCH DISCOVERIES & GAME-CHANGERS
 
 **Project**: Early-Warning Mathematics for Complex Systems: Phase 2 Advancements  
 **Authors**: Principal Investigator & Computational Research Team  
@@ -51,7 +51,7 @@ $$\hat{\kappa}(t) = -\frac{1}{\Delta t_{\text{probe}}} \ln\left(\frac{|x(t + \De
 Active probing eliminates sliding-window estimation latency and is completely immune to sensor noise coloring.
 
 ### 3.2 Closed-Loop Feedback Control Pipeline
-$$\boxed{\text{Observe } x_t} \longrightarrow \boxed{\text{Detect } \hat{\kappa} < \kappa_c} \longrightarrow \boxed{\text{Actuate Feedback } u(t) = -K (x_t - x_{\text{target}})}$$
+$$[\text{Observe } x_t] \longrightarrow [\text{Detect } \hat{\kappa} < \kappa_c] \longrightarrow [\text{Actuate Feedback } u(t) = -K (x_t - x_{\text{target}})]$$
 
 **Empirical Control Results**:
 | Intervention Activation Time | Lead Time to Natural Collapse | Stabilization Outcome | Energy Cost $\int u^2 dt$ |
@@ -68,7 +68,7 @@ $$\boxed{\text{Observe } x_t} \longrightarrow \boxed{\text{Detect } \hat{\kappa}
 
 ## 4. Game-Changer #10: Exact Theoretical Estimator Bias (Kendall 1954)
 
-We analytically verified and quantified the finite-sample downward bias in empirical $\operatorname{AR}(1)$ estimation.
+We analytically verified and quantified the finite-sample downward bias in empirical AR(1) estimation.
 
 ### Theoretical Derivation:
 For an Ornstein-Uhlenbeck process $dx = \lambda x dt + \sigma dW$ with lag $\Delta t$, the continuous-time theoretical autocorrelation is:

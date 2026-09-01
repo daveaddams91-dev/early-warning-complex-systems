@@ -1,4 +1,4 @@
-﻿# ADVERSARIAL COLLAPSE LAB RESULTS
+# ADVERSARIAL COLLAPSE LAB RESULTS
 
 **Project Title**: Early-Warning Mathematics for Complex Systems: Phase 2 Adversarial Stress-Testing  
 **Document**: Adversarial Falsification & Pathological Dynamic Scenarios Report  
@@ -45,7 +45,7 @@ To establish the true empirical and mathematical boundaries of early-warning sys
   A 2D coupled system where unobserved variable $z(t)$ undergoes a subcritical pitchfork bifurcation ($\dot{z} = \mu_z z - z^3$), while the observed coordinate $x(t)$ is weakly coupled until $z$ escapes its basin:
   $$\dot{x} = -(x - x_0) - 2.0 \max(0, z - 0.2)^2 + \sigma dW_1$$
 * **Mechanism of Deception**:
-  Because $x(t)$ remains linear until the instant of $z$-collapse, $\operatorname{Var}(x)$ and $\operatorname{AR}(1)_x$ exhibit zero advance warning.
+  Because $x(t)$ remains linear until the instant of $z$-collapse, $\mathrm{Var}(x)$ and $\mathrm{AR}(1)_x$ exhibit zero advance warning.
 * **Empirical Outcome**:
   - **Detection Rate**: $0.0\%$ for all $x$-observed indicators.
   - **Lead Time**: $0.0\text{ s}$ (Abrupt collapse occurs instantaneously without observable precursor).

@@ -1,4 +1,4 @@
-﻿# Mathematical Framework & Indicator Formulations
+# Mathematical Framework & Indicator Formulations
 
 This document details the analytical formulations for all stochastic dynamical systems, normal forms, and early-warning indicators implemented in this repository.
 
@@ -21,7 +21,7 @@ $$\begin{aligned}
 \frac{dw}{dt} &= \epsilon (v + a - b w) + \sigma dW_{2,t}
 \end{aligned}$$
 - **Parameters**: $\epsilon = 0.08, a = 0.7, b = 0.8$.
-- **Bifurcation Point**: $I_c \approx 0.332$ where $\operatorname{Tr}(\mathbf{J}) = 0$ and $\det(\mathbf{J}) > 0$.
+- **Bifurcation Point**: $I_c \approx 0.332$ where $\mathrm{Tr}(\mathbf{J}) = 0$ and $\det(\mathbf{J}) > 0$.
 - **Analytical Jacobian**:
   $$\mathbf{J}(v, w) = \begin{pmatrix} 1 - v^2 & -1 \\ \epsilon & -\epsilon b \end{pmatrix}$$
 

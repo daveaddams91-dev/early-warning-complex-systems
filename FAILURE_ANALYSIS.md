@@ -1,4 +1,4 @@
-﻿# SYSTEMATIC FAILURE ANALYSIS & THEORETICAL LIMITS
+# SYSTEMATIC FAILURE ANALYSIS & THEORETICAL LIMITS
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 3 Empirical & Theoretical Failure Investigation  
@@ -31,7 +31,7 @@ We systematically investigated the mathematical, structural, and observational m
   1. *Non-Smooth Governing Equations*:
      $$\dot{T} = \eta_1(T_0 - T) - |T - S| T$$
      $$\dot{S} = \eta_2(\mu - S) - |T - S| S$$
-     The flow term $|T - S|$ introduces a non-smooth derivative $d|q|/dq = \operatorname{sign}(q)$.
+     The flow term $|T - S|$ introduces a non-smooth derivative $d|q|/dq = \mathrm{sgn}(q)$.
   2. *Opposing Eigenvalue Movement & Anisotropic Fluctuation Projection*:
      As freshwater forcing $\mu$ increases, density difference $q = T - S$ decreases. The Jacobian matrix is:
      $$J = \begin{pmatrix} -\eta_1 - 2T + S & T \\ -S & -\eta_2 - T + 2S \end{pmatrix}$$

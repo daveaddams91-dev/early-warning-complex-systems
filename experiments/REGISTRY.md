@@ -1,4 +1,4 @@
-﻿# EXPERIMENTAL REGISTRY & PROVENANCE LEDGER
+# EXPERIMENTAL REGISTRY & PROVENANCE LEDGER
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Standard**: Unique Experiment IDs, Provenance Tracing, Configuration, Seeds, and Results  
@@ -92,7 +92,7 @@
 ---
 
 ## EXP-008: Exact Theoretical Estimator Bias Quantification (Kendall 1954)
-- **Question**: What is the magnitude of the small-sample downward bias in empirical $\operatorname{AR}(1)$ estimation across window sizes $W \in [30, 50, 100]$?
+- **Question**: What is the magnitude of the small-sample downward bias in empirical AR(1) estimation across window sizes $W \in [30, 50, 100]$?
 - **Hypothesis**: Finite-window sliding estimators underestimate continuous autocorrelation according to $\mathbb{E}[\hat{\rho}] \approx \rho - \frac{1+3\rho}{W}$.
 - **Script**: `experiments/scripts/run_phase2_gamechangers.py`
 - **Output Artifact**: `experiments/results/tables/phase2_theoretical_bias_analysis.csv`
