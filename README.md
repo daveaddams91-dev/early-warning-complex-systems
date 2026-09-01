@@ -85,14 +85,18 @@ python src/advancements/adaptive_inference_framework.py
 
 ---
 
-## 📜 Citation & License
+## 👤 Author & Citation
 
-Released under the **MIT License**. If utilizing this code or the Phase 4 theoretical framework, cite as:
+**Author**: Rajveersinh Vishal Pardeshi  
+**Repository**: [https://github.com/Raj123-0/early-warning-complex-systems](https://github.com/Raj123-0/early-warning-complex-systems)  
+**License**: [MIT License](LICENSE)
+
+If utilizing this codebase, benchmark datasets, or the theoretical framework in your research, please cite as:
 
 ```bibtex
-@software{early_warning_complex_systems_2026,
-  author = {Autonomous Mathematical Research Agent},
-  title = {Early-Warning Mathematics for Complex Systems: An Adaptive Multi-Indicator Inference Framework},
+@software{pardeshi2026earlywarning,
+  author = {Pardeshi, Rajveersinh Vishal},
+  title = {Early-Warning Mathematics for Complex Systems: Mathematical and Statistical Boundaries of Critical Transition Forecasting},
   year = {2026},
   publisher = {GitHub},
   url = {https://github.com/Raj123-0/early-warning-complex-systems}

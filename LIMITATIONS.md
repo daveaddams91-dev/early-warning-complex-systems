@@ -2,7 +2,7 @@
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 3 Definitive Limitations Audit  
-**Author**: Principal Investigator & Hostile Scientific Auditor  
+**Author**: Rajveersinh Vishal Pardeshi  
 **Date**: September 2026  
 
 ---

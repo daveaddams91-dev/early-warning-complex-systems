@@ -1,6 +1,6 @@
 # MATHEMATICAL AND STATISTICAL BOUNDARIES OF EARLY-WARNING INDICATORS FOR CRITICAL TRANSITIONS IN COMPLEX DYNAMICAL SYSTEMS
 
-**Authors**: Principal Investigator & Computational Research Team  
+**Author**: Rajveersinh Vishal Pardeshi  
 **Repository**: [https://github.com/Raj123-0/early-warning-complex-systems](https://github.com/Raj123-0/early-warning-complex-systems)  
 **Stage**: Phase 3 Final Validated Research Manuscript  
 **Date**: September 2026  

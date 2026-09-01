@@ -1,8 +1,8 @@
-﻿# PHASE 4 DISCOVERY REPORT: THE MATHEMATICAL PRINCIPLES OF ADAPTIVE EARLY-WARNING INFERENCE
+# PHASE 4 DISCOVERY REPORT: THE MATHEMATICAL PRINCIPLES OF ADAPTIVE EARLY-WARNING INFERENCE
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 4 Definitive Scientific Synthesis  
-**Authors**: Principal Investigator & Computational Research Team  
+**Author**: Rajveersinh Vishal Pardeshi  
 **Date**: September 2026  
 **Repository**: [https://github.com/Raj123-0/early-warning-complex-systems](https://github.com/Raj123-0/early-warning-complex-systems)  
 

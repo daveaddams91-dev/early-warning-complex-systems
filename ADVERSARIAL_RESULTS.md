@@ -2,7 +2,7 @@
 
 **Project Title**: Early-Warning Mathematics for Complex Systems: Phase 2 Adversarial Stress-Testing  
 **Document**: Adversarial Falsification & Pathological Dynamic Scenarios Report  
-**Author**: Principal Investigator & Hostile Peer Reviewer  
+**Author**: Rajveersinh Vishal Pardeshi
 
 ---
 

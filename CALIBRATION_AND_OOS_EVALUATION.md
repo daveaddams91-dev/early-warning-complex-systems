@@ -3,7 +3,7 @@
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Strict Holdout Generalization & Uncertainty Calibration  
 **Date**: September 2026  
-**Auditor**: Principal Investigator & Hostile Scientific Reviewer  
+**Auditor**: Rajveersinh Vishal Pardeshi
 
 ---
 

@@ -3,7 +3,7 @@
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Adversarial Pre-Publication Scientific Audit  
 **Date**: September 2026  
-**Auditor**: Principal Investigator & Hostile Scientific Reviewer  
+**Auditor**: Rajveersinh Vishal Pardeshi
 
 ---
 

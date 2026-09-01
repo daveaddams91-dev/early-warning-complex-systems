@@ -1,9 +1,9 @@
-﻿# MECHANISTIC INVESTIGATION & ABLATION OF AMOC (SYS-4) FAILURE
+# MECHANISTIC INVESTIGATION & ABLATION OF AMOC (SYS-4) FAILURE
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 4 Priority Investigation 1  
 **Date**: September 2026  
-**Author**: Principal Investigator & Hostile Scientific Reviewer  
+**Author**: Rajveersinh Vishal Pardeshi  
 
 ---
 

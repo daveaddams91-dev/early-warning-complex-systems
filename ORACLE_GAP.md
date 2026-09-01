@@ -3,7 +3,7 @@
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 4 Oracle Gap Analysis (EXP-013)  
 **Date**: September 2026  
-**Auditor**: Principal Investigator & Hostile Scientific Reviewer  
+**Auditor**: Rajveersinh Vishal Pardeshi
 
 ---
 

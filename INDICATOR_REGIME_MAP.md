@@ -3,7 +3,7 @@
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 4 Systematic Regime Characterization (EXP-010)  
 **Date**: September 2026  
-**Auditor**: Principal Investigator & Hostile Scientific Reviewer  
+**Auditor**: Rajveersinh Vishal Pardeshi
 
 ---
 

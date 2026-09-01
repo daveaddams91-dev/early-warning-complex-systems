@@ -2,7 +2,7 @@
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 3 Empirical & Theoretical Failure Investigation  
-**Author**: Principal Investigator & Hostile Peer Reviewer  
+**Author**: Rajveersinh Vishal Pardeshi
 **Date**: September 2026  
 
 ---

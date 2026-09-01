@@ -1,9 +1,9 @@
-﻿# REAL-WORLD EMPIRICAL DATASET PROVENANCE & SPECIFICATION
+# REAL-WORLD EMPIRICAL DATASET PROVENANCE & SPECIFICATION
 
 **Project**: Early-Warning Mathematics for Complex Systems  
 **Stage**: Phase 4 Empirical Real-World Integration  
 **Date**: September 2026  
-**Auditor**: Principal Investigator & Hostile Scientific Reviewer  
+**Author / Auditor**: Rajveersinh Vishal Pardeshi  
 
 ---
 

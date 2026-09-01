@@ -1,7 +1,7 @@
 # PHASE 2 ADVANCED RESEARCH DISCOVERIES & GAME-CHANGERS
 
 **Project**: Early-Warning Mathematics for Complex Systems: Phase 2 Advancements  
-**Authors**: Principal Investigator & Computational Research Team  
+**Authors**: Rajveersinh Vishal Pardeshi
 **Date**: September 2026  
 
 ---
