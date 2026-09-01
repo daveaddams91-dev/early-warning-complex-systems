@@ -65,3 +65,12 @@ All notable changes, theoretical advances, empirical discoveries, and bug fixes 
 - Replaced mismatched radar DOI on entry #16 with genuine publication DOI for Ritchie & Sieber 2016 (*Chaos*, DOI `10.1063/1.4963012`).
 - Expanded bibliography to **24 fully verified, resolving citations** with zero dead links or hallucinated authors, audited in `docs/BIBLIOGRAPHY_AUDIT.md`.
 - Added regression test `tests/test_references.py` ensuring bibliography completeness and valid DOIs.
+
+### 9. Statistical Significance (DeLong) Repair & Data Alignment Audit
+- **Replaced Placeholder String Stub**: Unmasked and eliminated the historical binary branch (`'< 0.001' if auc_mahal > auc_var else '0.08'`) in `experiments/scripts/run_all_experiments.py`, replacing it with genuine paired DeLong test calls across all 5 canonical systems.
+- **Fast $O(N \log N)$ Mid-Rank Implementation**: Optimized `delong_roc_variance` in `src/evaluation/metrics.py` to use `scipy.stats.rankdata` mid-ranks (Sun & Xu 2014), eliminating $O(m \times n)$ memory overhead while preserving machine-precision variance calculation.
+- **Dismantling of False AMOC Claim**: Confirmed with exact computed statistics in `experiments/results/tables/statistical_significance_delong.csv` that `CEWF-Mahalanobis` ($0.5169$) vs `Variance` ($0.5127$) on SYS-4 Stommel AMOC is statistically non-significant ($Z = 0.9031, p = 0.3665$), overturning the historical placeholder claim of $p < 0.001$.
+- **Headline Summary Table Reconciliation**: Corrected historical reporting in `CRITICAL_REVIEW.md` and `README.md` to match `level1_clean_benchmark.csv` data without pro-Mahalanobis spin (SYS-1 CEWF-Linear is $0.9960$, SYS-5 CEWF-Linear is $1.0000$, and SYS-5 baselines PCA1_Variance/MahalanobisDist/DNB_Index are $1.0000$).
+- **RuntimeWarning Elimination**: Scaled burn-in in `src/advancements/theoretical_analysis.py` to eliminate `Degrees of freedom <= 0 for slice` warnings.
+- **Expanded PyTest Suite**: Added unit tests in `tests/test_evaluation.py` for chance-level DeLong validation and CSV numeric type integrity, bringing the suite to **52 passed tests with 0 warnings**.
+- **Audit Documentation**: Authored `docs/STATISTICAL_TESTING_AUDIT.md` and updated `CRITICAL_REVIEW.md`.

@@ -113,3 +113,34 @@ class TestEvaluationMetrics:
         )
         assert boot_res['diff_mean'] >= 0.0
         assert not np.isnan(boot_res['ci_lower'])
+
+    def test_delong_chance_level_insignificance(self):
+        rng = np.random.default_rng(123)
+        y_true = np.concatenate([np.zeros(100), np.ones(100)])
+        # Both models predict noise (chance level ~0.50) with tiny random difference
+        score_a = rng.normal(0.01, 1.0, 200)
+        score_b = rng.normal(0.00, 1.0, 200)
+        
+        res = delong_paired_test(y_true, score_a, score_b)
+        assert isinstance(res['p_value'], float)
+        assert res['p_value'] > 0.05
+        assert np.abs(res['auc_a'] - 0.5) < 0.15
+        assert np.abs(res['auc_b'] - 0.5) < 0.15
+
+    def test_statistical_significance_csv_numeric_integrity(self):
+        import pandas as pd
+        from pathlib import Path
+        csv_path = Path(__file__).resolve().parent.parent / "experiments" / "results" / "tables" / "statistical_significance_delong.csv"
+        if csv_path.exists():
+            df = pd.read_csv(csv_path)
+            assert 'p_value_empirical' in df.columns
+            assert 'Z_Statistic' in df.columns
+            # Assert all p-values are numeric floats, not string placeholders like '< 0.001'
+            assert pd.api.types.is_numeric_dtype(df['p_value_empirical'])
+            assert pd.api.types.is_numeric_dtype(df['Z_Statistic'])
+            # Check SYS4 AMOC specifically: p-value must be non-significant (> 0.05)
+            amoc_rows = df[(df['System'] == 'SYS4_Stommel_AMOC') & (df['Comparison'].str.contains('CEWF-Mahalanobis vs Variance'))]
+            if len(amoc_rows) > 0:
+                p_val = float(amoc_rows['p_value_empirical'].values[0])
+                assert p_val > 0.05, f"Expected non-significant p-value for AMOC chance level, got {p_val}"
+

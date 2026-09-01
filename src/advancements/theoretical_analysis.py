@@ -1,4 +1,4 @@
-﻿"""
+"""
 Game-Changer #10: Exact Theoretical Analysis & Estimator Bias Quantification.
 Compares:
   1. Exact continuous Lyapunov stationary predictions: Var_th = sigma^2 / (2 |lambda|), AR1_th = exp(lambda * dt)
@@ -50,9 +50,12 @@ class TheoreticalComparisonEngine:
             res = integrator.simulate(t_max=t_max_mc, mu_func=lambda t, m=mu: m, sigma=sigma, seed=42)
             x_mc = res['x'][:, 0] if res['x'].ndim > 1 else res['x']
             
-            var_mc = float(np.var(x_mc[1000:], ddof=1))
-            dev = x_mc[1000:] - np.mean(x_mc[1000:])
-            ar1_mc = float(np.sum(dev[:-1] * dev[1:]) / (np.sum(dev**2) + 1e-12))
+            burn_in = min(1000, max(10, len(x_mc) // 5))
+            x_stat = x_mc[burn_in:]
+            var_mc = float(np.var(x_stat, ddof=1)) if len(x_stat) > 1 else float(np.var(x_mc))
+            dev = x_stat - np.mean(x_stat)
+            denom = np.sum(dev**2)
+            ar1_mc = float(np.sum(dev[:-1] * dev[1:]) / (denom + 1e-12)) if len(dev) > 1 and denom > 0 else 0.0
             
             # 3. Finite Sliding Window Empirical Estimators
             for w in window_sizes:

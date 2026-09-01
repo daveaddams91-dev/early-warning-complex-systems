@@ -297,7 +297,8 @@ def compute_false_alarm_rate(
 
 def delong_roc_variance(y_true: np.ndarray, y_score: np.ndarray) -> Tuple[float, np.ndarray]:
     """
-    Computes structural components of AUC variance for DeLong test.
+    Computes structural components of AUC variance for DeLong test in O(N log N) time
+    using mid-ranks (Sun & Xu 2014, Fast DeLong implementation).
     """
     pos_mask = (y_true == 1)
     neg_mask = (y_true == 0)
@@ -311,16 +312,23 @@ def delong_roc_variance(y_true: np.ndarray, y_score: np.ndarray) -> Tuple[float,
     pos_scores = y_score[pos_mask]
     neg_scores = y_score[neg_mask]
     
-    # Kernel matrix: V_10(i) = 1/n sum_j I(X_i > Y_j)
-    v10 = np.mean((pos_scores[:, None] > neg_scores[None, :]).astype(float) + 
-                  0.5 * (pos_scores[:, None] == neg_scores[None, :]).astype(float), axis=1)
-    # Kernel matrix: V_01(j) = 1/m sum_i I(X_i > Y_j)
-    v01 = np.mean((pos_scores[:, None] > neg_scores[None, :]).astype(float) + 
-                  0.5 * (pos_scores[:, None] == neg_scores[None, :]).astype(float), axis=0)
-                  
-    auc = np.mean(v10)
-    var = (np.var(v10, ddof=1) / m) + (np.var(v01, ddof=1) / n)
-    return float(auc), np.concatenate([v10, v01])
+    # Combined ranks (1-based mid-ranks)
+    ranks = st.rankdata(y_score)
+    pos_ranks = ranks[pos_mask]
+    neg_ranks = ranks[neg_mask]
+    
+    # Within-class ranks
+    pos_within_ranks = st.rankdata(pos_scores)
+    neg_within_ranks = st.rankdata(neg_scores)
+    
+    # V10[i] = (rank_in_combined - rank_in_pos) / n
+    v10 = (pos_ranks - pos_within_ranks) / n
+    # V01[j] = 1.0 - (rank_in_combined - rank_in_neg) / m
+    v01 = 1.0 - (neg_ranks - neg_within_ranks) / m
+    
+    auc = float(np.mean(v10))
+    var = float((np.var(v10, ddof=1) / m) + (np.var(v01, ddof=1) / n))
+    return auc, np.concatenate([v10, v01])
 
 
 def delong_paired_test(

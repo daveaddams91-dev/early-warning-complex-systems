@@ -1,4 +1,4 @@
-﻿"""
+"""
 Comprehensive Experimental Runner for Hierarchical Levels 1-6.
 Optimized for high throughput via single-pass feature caching.
 """
@@ -44,7 +44,8 @@ from src.models.bocpd_composite import BayesianChangepointModel
 from src.evaluation.metrics import (
     compute_roc_pr,
     compute_lead_time_distribution,
-    compute_false_alarm_rate
+    compute_false_alarm_rate,
+    delong_paired_test
 )
 from src.visualization.plots import (
     plot_trajectory_and_indicators,
@@ -142,6 +143,7 @@ def run_experiment_suite(
     # -------------------------------------------------------------
     print("\n>>> LEVEL 1: Clean Synthetic Data Benchmark...", flush=True)
     level1_results = []
+    l1_eval_data = {}
     
     for system, ramp_fn, t_max, null_fn, sys_tag in systems_config:
         t0_sys = time.time()
@@ -163,6 +165,8 @@ def run_experiment_suite(
         
         all_methods = list(indicators.keys()) + list(models.keys())
         sys_roc_dict = {}
+        sys_scores_dict = {}
+        sys_y_true_dict = {}
         
         for m_name in all_methods:
             ramp_sc = [s[m_name] for s in ramp_signals]
@@ -182,11 +186,15 @@ def run_experiment_suite(
                     y_score.extend(sc[safe_mask])
                     
             for sc in null_sc:
-                v = sc[~np.isnan(sc)]
-                if len(v) > 50:
-                    y_true.extend([0] * len(v[50:]))
-                    y_score.extend(v[50:])
+                t_null = np.arange(len(sc)) * dt_obs
+                null_mask = t_null >= 10.0
+                if np.sum(null_mask) > 0:
+                    y_true.extend([0] * np.sum(null_mask))
+                    y_score.extend(sc[null_mask])
                     
+            sys_scores_dict[m_name] = np.array(y_score)
+            sys_y_true_dict[m_name] = np.array(y_true)
+            
             roc_res = compute_roc_pr(np.array(y_true), np.array(y_score))
             sys_roc_dict[m_name] = roc_res
             
@@ -224,6 +232,7 @@ def run_experiment_suite(
             t_crit=example_ramp['t_crit'], system_name=sys_tag,
             save_path=str(figs_dir / f"trajectory_{sys_tag}_level1.png")
         )
+        l1_eval_data[sys_tag] = (sys_y_true_dict, sys_scores_dict)
         print(f"done in {time.time() - t0_sys:.1f}s", flush=True)
 
     df_l1 = pd.DataFrame(level1_results)
@@ -491,34 +500,46 @@ def run_experiment_suite(
     # -------------------------------------------------------------
     # Statistical Significance (DeLong Tests)
     # -------------------------------------------------------------
-    print("\n>>> STATISTICAL SIGNIFICANCE TESTS (DeLong Paired Tests)...", flush=True)
+    print("\n>>> STATISTICAL SIGNIFICANCE TESTS (Genuine Paired DeLong Tests)...", flush=True)
     delong_results = []
-    for sys_tag in ['SYS1_May_Fold', 'SYS2_FitzHughNagumo_Hopf', 'SYS4_Stommel_AMOC', 'SYS5_Coupled_Network']:
-        sub_df = df_l1[df_l1['System'] == sys_tag]
-        if len(sub_df) == 0:
+    
+    comparisons = [
+        ('CEWF-Rank', 'AR(1)'),
+        ('CEWF-Mahalanobis', 'Variance'),
+        ('CEWF-Linear', 'Variance'),
+        ('CEWF-ElasticNet', 'Variance')
+    ]
+    
+    for sys_tag in ['SYS1_May_Fold', 'SYS2_FitzHughNagumo_Hopf', 'SYS3_Subcritical_Pitchfork', 'SYS4_Stommel_AMOC', 'SYS5_Coupled_Network']:
+        if sys_tag not in l1_eval_data:
             continue
-        auc_rank = float(sub_df[sub_df['Method'] == 'CEWF-Rank']['ROC_AUC'].values[0])
-        auc_ar1 = float(sub_df[sub_df['Method'] == 'AR(1)']['ROC_AUC'].values[0])
-        auc_mahal = float(sub_df[sub_df['Method'] == 'CEWF-Mahalanobis']['ROC_AUC'].values[0])
-        auc_var = float(sub_df[sub_df['Method'] == 'Variance']['ROC_AUC'].values[0])
-        
-        delong_results.append({
-            'System': sys_tag,
-            'Comparison': 'CEWF-Rank vs AR(1)',
-            'AUC_Composite': auc_rank,
-            'AUC_Baseline': auc_ar1,
-            'AUC_Gain': auc_rank - auc_ar1,
-            'p_value_empirical': '< 0.001' if auc_rank > auc_ar1 else '0.12'
-        })
-        delong_results.append({
-            'System': sys_tag,
-            'Comparison': 'CEWF-Mahalanobis vs Variance',
-            'AUC_Composite': auc_mahal,
-            'AUC_Baseline': auc_var,
-            'AUC_Gain': auc_mahal - auc_var,
-            'p_value_empirical': '< 0.001' if auc_mahal > auc_var else '0.08'
-        })
-        
+        y_true_map, scores_map = l1_eval_data[sys_tag]
+        for comp_name, base_name in comparisons:
+            if comp_name not in scores_map or base_name not in scores_map:
+                continue
+            y_t = y_true_map[comp_name]
+            sc_comp = scores_map[comp_name]
+            sc_base = scores_map[base_name]
+            
+            delong_res = delong_paired_test(y_t, sc_comp, sc_base)
+            
+            auc_comp = delong_res['auc_a']
+            auc_base = delong_res['auc_b']
+            gain = delong_res['diff']
+            z_stat = delong_res['z_stat']
+            p_val = delong_res['p_value']
+            
+            delong_results.append({
+                'System': sys_tag,
+                'Comparison': f"{comp_name} vs {base_name}",
+                'AUC_Composite': auc_comp,
+                'AUC_Baseline': auc_base,
+                'AUC_Gain': gain,
+                'Z_Statistic': z_stat,
+                'p_value_empirical': float(p_val) if not np.isnan(p_val) else np.nan,
+                'Significance_Verdict': 'Significant (p < 0.05)' if (not np.isnan(p_val) and p_val < 0.05) else 'Not Significant'
+            })
+            
     df_delong = pd.DataFrame(delong_results)
     df_delong.to_csv(tables_dir / "statistical_significance_delong.csv", index=False)
     print("  All results successfully written to experiments/results/tables/", flush=True)

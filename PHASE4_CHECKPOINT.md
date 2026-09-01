@@ -57,7 +57,7 @@ Validated across 14 computational experiments (EXP-001 to EXP-014) on 6 dynamica
 - Trajectory-level ROC-AUC and PR-AUC with clustered realization bootstrap (B=500).
 - Strict out-of-sample evaluation: AEWIF achieves ROC-AUC = 0.9200 on unseen Pitchfork and 0.9956 on unseen Adler SNIC, while Isotonic Calibration reduces Expected Calibration Error (ECE) by >60% across all holdouts (CALIBRATION_AND_OOS_EVALUATION.md).
 - Documented complete failures: Stommel AMOC (AUC = 0.5289) and unobserved multi-node networks (AUC = 0.0000).
-- 38/38 unit tests passing with zero causal look-ahead leakage.
+- 52/52 unit tests passing with zero causal look-ahead leakage and zero runtime warnings.
 
 Novelty level:
 N3 / N4 (Downgraded from N5 following rigorous comparison against Hotelling 1931, John 1971, Chow 1970, and Boettiger & Hastings 2012).

@@ -1,7 +1,7 @@
 # Early-Warning Mathematics for Complex Systems
 
 [![CI](https://github.com/Raj123-0/early-warning-complex-systems/actions/workflows/ci.yml/badge.svg)](https://github.com/Raj123-0/early-warning-complex-systems/actions)
-[![Tests](https://img.shields.io/badge/pytest-50%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/pytest-52%20passed-brightgreen.svg)](tests/)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0004--7838--4064-green.svg)](https://orcid.org/0009-0004-7838-4064)
@@ -52,6 +52,8 @@ An open-source mathematical research framework and benchmark investigating wheth
 ## 📁 Research Documentation Ledger
 
 - **[PHASE4_DISCOVERY_REPORT.md](PHASE4_DISCOVERY_REPORT.md)**: Definitive 10-question synthesis resolving the contradiction.
+- **[CRITICAL_REVIEW.md](CRITICAL_REVIEW.md)**: Comprehensive Red-Team audit, DeLong statistical verification, and table reconciliation.
+- **[docs/BIBLIOGRAPHY_AUDIT.md](docs/BIBLIOGRAPHY_AUDIT.md)**: Primary literature audit validating all 24 Crossref citations.
 - **[INDICATOR_REGIME_MAP.md](INDICATOR_REGIME_MAP.md)**: Operating profiles and failure regimes across indicators.
 - **[DETECTABILITY_BOUNDARY.md](DETECTABILITY_BOUNDARY.md)**: Empirical and analytical map of predictability boundaries.
 - **[FAILURE_MECHANISM_MAP.md](FAILURE_MECHANISM_MAP.md)**: Six-class transition taxonomy and CSD limits.
@@ -74,7 +76,7 @@ cd early-warning-complex-systems
 # 2. Install dependencies
 pip install numpy scipy scikit-learn pandas matplotlib networkx pytest
 
-# 3. Run all unit tests (38/38 passing)
+# 3. Run all unit tests (52/52 passing, 0 warnings)
 python -m pytest tests/ -v
 
 # 4. Run Phase 4 discovery experiments
