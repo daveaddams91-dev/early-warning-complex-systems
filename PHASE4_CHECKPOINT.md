@@ -1,4 +1,4 @@
-﻿# PHASE 4 RESEARCH CHECKPOINT
+# PHASE 4 RESEARCH CHECKPOINT
 
 Central hypothesis:
 «The usefulness of an early-warning indicator is conditional on the dynamical mechanism, observation process, and noise structure of the system; therefore, indicator aggregation should be adaptive rather than universal.»
@@ -38,28 +38,29 @@ Generalization:
 - Generalization fails completely when transferring to non-smooth vector fields (Stommel AMOC) or non-bifurcation escape (N-tipping and R-tipping).
 
 Detectability boundary:
-Empirically mapped across 36 parameter configurations (EXP-011). Predictability partitions into:
-- Reliable Regime (\mathrm{SNR}_{\text{dyn}} \ge 2.5): \sigma_{\text{obs}} \le 0.15, \Delta t \le 0.05\text{ s} (\text{ROC-AUC} = 1.000).
-- Uncertain Regime (1.0 \le \mathrm{SNR}_{\text{dyn}} < 2.5): \sigma_{\text{obs}} = 0.35, \Delta t \le 0.05\text{ s} (\text{ROC-AUC} \approx 0.733).
-- Unreliable Regime (\mathrm{SNR}_{\text{dyn}} < 1.0): \sigma_{\text{obs}} = 0.35, \Delta t \ge 0.15\text{ s} (\text{ROC-AUC} \le 0.591).
+Finite-sample non-stationary minimax bound: \mathrm{SNR}_{\text{dyn}} < \sqrt{C(\alpha, \beta) \cdot \frac{r \Delta t}{\delta_{\mu}}}.
+Because parameter drift at rate r bounds the allowable quasi-stationary window (N_{\max} \le \delta_{\mu}/(r \Delta t)), observation noise \sigma_{\text{obs}}^2 raises the required sample size (N_{\text{req}} \propto \sigma_{\text{obs}}^4). When N_{\max} < N_{\text{req}}, distinguishing critical slowing down from null fluctuations is mathematically impossible for any causal sliding-window estimator.
+Empirically mapped across 36 configurations (EXP-011): collapses to ROC-AUC \le 0.591 when \sigma_{\text{obs}} \ge 0.35, \Delta t \ge 0.15\text{ s}.
 
 Information requirement:
 In EXP-012, post-shock collapse and recovery futures remain statistically indistinguishable for \Delta t_{\text{latency}} \approx 15.0\text{ s} (Wasserstein distance W_1 < 0.15, empirical Bayes error \approx 42%). Distinguishability requires waiting for \Delta t > 15.0\text{ s} (W_1 = 0.268, Bayes error drops to 0.0%). Rolling window estimation requires at least W = 50 steps (2.5s) to prevent covariance condition number explosion (\kappa \le 2.0).
 
 Mathematical result:
-1. Proof of the Noise Dilution Theorem: \mathrm{SNR}_{\text{comp}} = \sqrt{K_0 / (K_0 + K_{\text{noise}})} \cdot \mathrm{SNR}_{\text{clean}}.
-2. Proof of Directional Cancellation: \Delta_{\text{comp}} = \frac{1}{2}(\Delta_1 + \Delta_2) = 0 when \Delta_1 = -\Delta_2.
-3. Proof of Spatial Noise Averaging: In a D-node network with i.i.d. sensor noise, spatial eigenvector projection filters sensor noise by 1/\sqrt{D}.
-4. Participation ratio formulation of indicator diversity: K_{\text{eff}} = (\mathrm{Tr}\mathbf{R})^2 / \mathrm{Tr}(\mathbf{R}^2).
+1. Proof of the Noise Dilution Theorem: \mathrm{SNR}_{\text{comp}} = \sqrt{K_0 / (K_0 + K_{\text{noise}})} \cdot \mathrm{SNR}_{\text{clean}} (Theorem 1, docs/THEORETICAL_PROOFS.md).
+2. Proof of Directional Cancellation: \Delta_{\text{comp}} = \frac{1}{2}(\Delta_1 + \Delta_2) = 0 when \Delta_1 = -\Delta_2 (Theorem 2).
+3. Proof of Spatial Noise Averaging: In a D-node network with i.i.d. sensor noise, spatial eigenvector projection filters sensor noise by 1/\sqrt{D} (Theorem 3).
+4. Finite-Window Minimax Bound: N_{\text{req}} > N_{\max} threshold (Proposition 1).
+5. Participation ratio formulation of indicator diversity: K_{\text{eff}} = (\mathrm{Tr}\mathbf{R})^2 / \mathrm{Tr}(\mathbf{R}^2).
 
 Empirical result:
 Validated across 14 computational experiments (EXP-001 to EXP-014) on 6 dynamical systems:
 - Trajectory-level ROC-AUC and PR-AUC with clustered realization bootstrap (B=500).
-- Exact quantification of the Oracle Gap G across topologies (G = 0.000 on clean fold, G = +0.691 on coupled network for naive composites).
+- Strict out-of-sample evaluation: AEWIF achieves ROC-AUC = 0.9200 on unseen Pitchfork and 0.9956 on unseen Adler SNIC, while Isotonic Calibration reduces Expected Calibration Error (ECE) by >60% across all holdouts (CALIBRATION_AND_OOS_EVALUATION.md).
+- Documented complete failures: Stommel AMOC (AUC = 0.5289) and unobserved multi-node networks (AUC = 0.0000).
 - 38/38 unit tests passing with zero causal look-ahead leakage.
 
 Novelty level:
-N5
+N3 / N4 (Downgraded from N5 following rigorous comparison against Hotelling 1931, John 1971, Chow 1970, and Boettiger & Hastings 2012).
 
 Biggest unresolved problem:
 Passive observational indicators cannot distinguish between an impending critical collapse and an exogenous non-collapsing transient shock during the initial informational latency window (\Delta t \le 15.0\text{ s}), where all energy moments spike simultaneously. Resolving this without latency requires active perturbation probing, which is invasive or physically impossible in planetary-scale systems (e.g. Earth AMOC).

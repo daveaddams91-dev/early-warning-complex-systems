@@ -1,4 +1,4 @@
-﻿"""
+"""
 Unit tests for Phase 4 theoretical and algorithmic advancements:
 - Noise Dilution Theorem validation
 - Effective indicator diversity K_eff
@@ -10,6 +10,7 @@ import numpy as np
 import pytest
 from src.advancements.adaptive_inference_framework import AdaptiveInferenceFramework
 from src.advancements.information_diversity import calculate_effective_diversity
+from src.advancements.reliability_calibration import ReliabilityCalibrator, compute_calibration_metrics
 from src.indicators.univariate import VarianceIndicator, AutocorrelationLag1Indicator
 
 
@@ -87,3 +88,45 @@ class TestPhase4Advancements:
         # mean reliability score should be below threshold
         mean_rel = np.mean(res['reliability_score'][100:])
         assert mean_rel < 0.30, f"Expected reliability < 0.30 under pure white noise, got {mean_rel}"
+
+    def test_reliability_calibrator_ece_reduction(self):
+        rng = np.random.default_rng(789)
+        # Generate uncalibrated overconfident scores
+        raw_scores = rng.beta(2, 5, size=500)
+        # True labels with probability proportional to monotonic sigmoid
+        true_probs = 1.0 / (1.0 + np.exp(-4.0 * (raw_scores - 0.3)))
+        labels = rng.binomial(1, true_probs)
+
+        # Uncalibrated metrics
+        uncal_m = compute_calibration_metrics(raw_scores, labels)
+
+        # Calibrate via Isotonic Regression
+        cal = ReliabilityCalibrator()
+        cal.fit(raw_scores[:250], labels[:250])
+        cal_scores = cal.predict(raw_scores[250:])
+
+        cal_m = compute_calibration_metrics(cal_scores, labels[250:])
+
+        # Expect calibration to reduce ECE and Brier score
+        assert cal_m['ece'] < uncal_m['ece'], f"Expected ECE reduction: {cal_m['ece']} vs {uncal_m['ece']}"
+        assert cal_m['brier_score'] <= uncal_m['brier_score'] + 0.05
+
+    def test_finite_window_detectability_bound(self):
+        # Verify that N_req exceeds N_max when SNR_dyn is below the minimax threshold
+        alpha = 0.05
+        beta = 0.20
+        c_val = 2.0 * (1.645 + 0.842)**2  # ~12.37
+        r = 0.02
+        dt = 0.05
+        delta_mu = 0.5
+        n_max = int(delta_mu / (r * dt))  # 500 points
+
+        # Case 1: High SNR_dyn (1.5) -> N_req = 12.37 / 1.5^2 = 5.5 < N_max (Detectable)
+        snr_high = 1.5
+        n_req_high = c_val / (snr_high**2)
+        assert n_req_high < n_max, "High SNR should be within quasi-stationary window"
+
+        # Case 2: Very Low SNR_dyn (0.05) -> N_req = 12.37 / 0.0025 = 4948 > N_max (Mathematically Undetectable)
+        snr_low = 0.05
+        n_req_low = c_val / (snr_low**2)
+        assert n_req_low > n_max, "Very low SNR should exceed maximum quasi-stationary window"
