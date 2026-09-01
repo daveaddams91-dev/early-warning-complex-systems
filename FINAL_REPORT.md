@@ -81,6 +81,15 @@ Audited in `DATA_LEAKAGE_AUDIT.md` and verified in `tests/test_reference_metrics
 
 ## 11. Results
 
+### Key Empirical Findings & Statistical Reality
+> [!IMPORTANT]
+> **Rigorous Statistical Performance Breakdown of Composite Aggregation**:
+> Under our non-leaking trajectory-level evaluation protocol ($N=25$ independent stochastic trajectories per system, clustered bootstrap confidence intervals):
+> - **Composite models significantly help on only 1 of 5 systems** (`SYS-2` FitzHugh-Nagumo Hopf: $\mathrm{AUC} = 0.9536$ vs $\mathrm{AR}(1) = 0.5072$), where rotational imaginary eigenvalues blind scalar autocorrelation.
+> - **Composite models are statistically indistinguishable from simple variance on 2 systems** (`SYS-1` May Fold: $\mathrm{AUC} = 1.0000$ vs $1.0000$, and `SYS-5` Coupled Network: $\mathrm{AUC} = 1.0000$ vs $1.0000$, $p \ge 0.08$).
+> - **Composite models significantly underperform simple variance on 1 system** (`SYS-3` Subcritical Pitchfork: $\mathrm{AUC} = 0.4933$ vs $\mathrm{Variance} = 0.8945$, $p = 0.02$, due to noise dilution and indicator conflict).
+> - **All models (composite, deep learning, and univariate) fail catastrophically on 1 system** (`SYS-4` Stommel AMOC: $\mathrm{AUC} \le 0.2944$), because convective density drag $|T - S|$ prevents critical fluctuation growth on the observed manifold.
+
 ### 11.1 Trajectory-Level Clean Benchmark & Deep Learning Baseline (EXP-001 & EXP-012)
 | System | Variance | AR(1) | PermutationEntropy | CEWF-Mahalanobis | DeepEWS (Bury 2021) | DeLong $p$ (Deep vs Mah) | Adaptive-Bayesian-EWS |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |

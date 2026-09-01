@@ -10,7 +10,7 @@ An open-source mathematical research framework and benchmark investigating wheth
 
 ---
 
-## 🔬 Core Statistical Reality & Scientific Findings
+## 🔬 Key Empirical Findings & Statistical Reality
 
 > [!IMPORTANT]
 > **Empirical Performance Breakdown of Composite Aggregation**:
