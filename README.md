@@ -1,81 +1,80 @@
 ﻿# Early-Warning Mathematics for Complex Systems
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/pytest-20%2F20%20passing-brightgreen.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://img.shields.io/badge/pytest-34%20passed-brightgreen.svg)](tests/)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Audit](https://img.shields.io/badge/Phase%203%20Audit-Validated-blueviolet.svg)](CHECKPOINT_C.md)
 
-A rigorous mathematical and software-engineering research repository investigating:
-> **«Can mathematical/statistical indicators detect that a complex dynamical system is approaching a critical transition or collapse before the transition occurs?»**
-
----
-
-## Key Empirical Findings
-
-1. **Multivariate Regularization Provides Noise Invariance**: Under extreme measurement noise ($\text{SNR} = 0\text{ dB}$) and colored red noise where univariate $\text{AR}(1)$ collapses to near-chance guessing ($\text{ROC-AUC} = 0.5361$ and $0.5180$), regularized multi-indicator Mahalanobis distance (`CEWF-Mahalanobis`) preserves robust diagnostic accuracy ($\text{ROC-AUC} = 0.8258$ and $0.9542$, paired DeLong test $p < 0.001$).
-2. **The Rank Aggregation Trap**: Naive unweighted rank correlation averaging (`CEWF-Rank`) underperforms scalar sample variance in clean regimes due to noise dilution from non-informative indicators (excess kurtosis, permutation entropy).
-3. **Topological Generalization**: Zero-shot transfer from 1D fold systems generalizes cleanly to 10-node mutualistic networks ($\text{ROC-AUC} = 0.9926$) and Hopf bifurcations ($\text{ROC-AUC} = 0.7721$), but fails on non-smooth advective systems (Stommel AMOC, $\text{ROC-AUC} = 0.4667$).
-4. **Adversarial Failure Modes**: Critical Slowing Down (CSD) provides **zero advance warning ($0.0\%$ detection rate)** for pure noise-induced transitions (N-tipping) and rate-dependent transitions (R-tipping), while triggering a **$100\%$ false alarm rate** under transient pulse shocks.
+An open-source mathematical research framework and benchmark investigating whether statistical and information-theoretic indicators can reliably anticipate critical transitions and systemic collapse in complex dynamical systems.
 
 ---
 
-## Summary Benchmark Table (Clean Level 1 Benchmark)
+## 🔬 Core Scientific Findings (Phase 3 Validated Benchmark)
 
-| System | Best Baseline Indicator | Baseline ROC-AUC | Best Composite Model | Composite ROC-AUC | Statistical Significance (DeLong) |
-| :--- | :--- | :---: | :--- | :---: | :---: |
-| **SYS-1 (May Fold)** | Variance | 0.9971 | CEWF-Linear / CEWF-Mahalanobis | 0.9667 / 0.9638 | $p = 0.08$ |
-| **SYS-2 (FitzHugh Hopf)** | MahalanobisDist | 0.9999 | CEWF-Linear | 0.7457 | $p < 0.001$ |
-| **SYS-3 (Pitchfork)** | MahalanobisDist | 0.9027 | CEWF-ElasticNet | 0.6662 | $p < 0.001$ |
-| **SYS-4 (Stommel AMOC)** | MahalanobisDist | 0.9960 | CEWF-Mahalanobis | 0.5167 | **$p < 0.001$** |
-| **SYS-5 (Mutualistic Net)** | Variance | 0.9995 | CEWF-Mahalanobis | 0.9939 | $p = 0.08$ |
+- **Trajectory-Level Validation**: Replaced time-step pooled pseudoreplication with realization-level evaluation ($N=25$ independent stochastic trajectories per system) and clustered bootstrap confidence intervals.
+- **Composite Model Superiority**: Tikhonov-regularized multi-indicator Mahalanobis distance (`CEWF-Mahalanobis`) and Adaptive Bayesian Warning Engine (`Adaptive-Bayesian-EWS`) achieve trajectory-level $\text{ROC-AUC} = 1.000$ under $0\text{ dB}$ SNR Gaussian noise and colored red noise, where classical scalar $\operatorname{AR}(1)$ collapses to $\text{AUC} \le 0.384$ ($p = 0.0000$, EXP-002, EXP-003).
+- **The Non-Universality of Early-Warning Signals**: Critical Slowing Down (CSD) indicators fail completely on non-smooth thermohaline ocean circulation (Stommel AMOC, $\text{AUC} \le 0.314$), noise-induced tipping ($0.0\%$ detection), and rate-induced tipping ($0.0\%$ detection).
+- **The Detectability Phase Boundary**: Mapped the parameter space boundary where dynamical $\text{SNR} < 1.0$ ($\sigma_{\text{obs}} \ge 0.40$), rendering statistical warning fundamentally impossible regardless of sliding-window length (EXP-004).
+- **Active Probing & Control**: Active test perturbations directly estimate local eigenvalues $\hat{\kappa}$ without sliding-window delays, enabling closed-loop feedback control to arrest tipping up to $5\text{ s}$ before bifurcation (EXP-006).
 
 ---
 
-## Repository Architecture
+## 📊 Summary of Validated Benchmark Results
 
-```
-early-warning-complex-systems/
-├── src/
-│   ├── systems/            # Canonical SDE Systems (May, FitzHugh-Nagumo, Pitchfork, Stommel, Network)
-│   ├── simulation/         # Euler-Maruyama SDE Integrator & Observation Noise Corrupters
-│   ├── indicators/         # 11 Univariate & Multivariate Mathematical Indicators
-│   ├── models/             # 5 Composite Early-Warning Frameworks (Linear, Rank, Mahalanobis, ElasticNet, BOCPD)
-│   ├── evaluation/         # Strict Non-Leaking Metrics (ROC/PR, Lead Time, False Alarms, DeLong Test)
-│   └── visualization/      # Publication-Quality Matplotlib Plotting Utilities
-├── experiments/
-│   ├── scripts/            # End-to-End Hierarchical Benchmark Runner (Levels 1-6)
-│   └── results/            # Persisted CSV Tables and PNG Figures
-├── tests/                  # Full PyTest Suite (20 Tests across all modules)
-├── docs/                   # Mathematical Specifications & Reproducibility Guide
-├── REFERENCES.md           # Peer-Reviewed Academic Bibliography (21 Verified DOIs)
-├── NOVELTY_AUDIT.md        # Academic Novelty Comparison vs Prior Literature
-├── RESEARCH_BLUEPRINT.md   # Mathematical Specifications & Falsifiable Hypotheses
-├── CRITICAL_REVIEW.md      # Adversarial Red-Teaming & Falsification Audit
-├── LIMITATIONS.md          # Theoretical & Observational Boundary Conditions
-└── FINAL_REPORT.md         # Comprehensive Research Manuscript
-```
+### Trajectory-Level Clean Benchmark (EXP-001)
+| System | Bifurcation Topology | Variance | AR(1) | CEWF-Mahalanobis | Adaptive-Bayesian-EWS |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **SYS1_May_Fold** | 1D Saddle-Node Fold | **1.0000** | 0.4848 | **1.0000** | **1.0000** |
+| **SYS2_FitzHughNagumo_Hopf**| 2D Supercritical Hopf | **1.0000** | 0.5072 | **0.9792** | **1.0000** |
+| **SYS3_Subcritical_Pitchfork**| 1D Pitchfork Jump | **0.8945** | 0.5127 | 0.4764 | **0.8655** |
+| **SYS4_Stommel_AMOC** | 2D Non-Smooth Fold | 0.2064 | 0.3136 | 0.2736 | 0.2416 |
+| **SYS5_Coupled_Network** | 10D Mutualistic Network | **1.0000** | 0.7072 | **1.0000** | **1.0000** |
+
+### Unknown-Transition Zero-Knowledge Generalization (EXP-009)
+| System | Mechanism | Method | Trajectory ROC-AUC | Outcome |
+| :--- | :--- | :---: | :---: | :---: |
+| **Adler Phase Oscillator** | Saddle-Node on Invariant Circle (Global) | **Adaptive-Bayesian-EWS** | **0.9725** | **SUCCESS** |
+| **Adler Phase Oscillator** | Saddle-Node on Invariant Circle (Global) | **CEWF-Mahalanobis** | **0.9600** | **SUCCESS** |
+| **Adler Phase Oscillator** | Saddle-Node on Invariant Circle (Global) | **Variance** | **1.0000** | **SUCCESS** |
+| **Adler Phase Oscillator** | Saddle-Node on Invariant Circle (Global) | **AR(1)** | 0.8050 | SUCCESS |
+| **Adler Phase Oscillator** | Saddle-Node on Invariant Circle (Global) | Permutation Entropy | 0.4425 | **FAILED** |
 
 ---
 
-## Quickstart & Reproducibility
+## 🛠️ Quickstart & Reproduction
 
-### 1. Run Unit Tests (20/20 Passing)
 ```bash
-python -m pytest tests/ -v
-```
+# 1. Clone repository
+git clone https://github.com/Raj123-0/early-warning-complex-systems.git
+cd early-warning-complex-systems
 
-### 2. Run Complete 6-Level Experimental Suite
-```bash
-python experiments/scripts/run_all_experiments.py
+# 2. Install dependencies
+pip install numpy scipy scikit-learn pandas matplotlib networkx pytest
+
+# 3. Run all unit tests (34/34 passing)
+pytest tests/ -v
+
+# 4. Run full validated benchmark suite
+python experiments/scripts/run_validated_benchmark.py
+
+# 5. Generate automated summary reports
+python experiments/scripts/generate_reports.py
 ```
-Outputs are written to `experiments/results/tables/` and `experiments/results/figures/`.
 
 ---
 
-## References
+## 📁 Repository Architecture
 
-See [REFERENCES.md](REFERENCES.md) for full citations including DOIs and paper links. Key foundations:
-- **Scheffer et al. (2009)**: Early-warning signals for critical transitions. *Nature*, 461(7260), 53-59.
-- **Dakos et al. (2008)**: Slowing down as an early warning signal for abrupt climate change. *PNAS*, 105(38), 14308-14312.
-- **Boettiger & Hastings (2012)**: Early warning signals and the prosecutor's fallacy. *Proc. R. Soc. B*, 279(1748), 4734-4739.
-- **Bury et al. (2021)**: Deep learning for early warning signals of critical transitions. *PNAS*, 118(39), e2106140118.
-- **Bandt & Pompe (2002)**: Permutation entropy: A natural complexity measure for time series. *Phys. Rev. Lett.*, 88(17), 174102.
+- `src/systems/`: 5 canonical dynamical systems + Adler SNIC oscillator.
+- `src/simulation/`: SDE Euler-Maruyama numerical integrator and distortion operators.
+- `src/indicators/`: Univariate and multivariate statistical indicators.
+- `src/models/`: Multi-indicator composite frameworks (`CEWF-Linear`, `CEWF-Rank`, `CEWF-Mahalanobis`, `CEWF-BOCPD`).
+- `src/advancements/`: Phase 2 & 3 research advancements (Detectability, Adaptive Warning, Counterfactuals, Active Probing, Control, Unknown Transition).
+- `src/evaluation/`: Production and reference metric implementations (Trajectory-level ROC, Operational lead times, Clustered bootstrap).
+- `results/historical/`: Frozen original published artifacts (commits `188bea7`, `2212001`).
+- `results/validated/`: Repaired, realization-level validated experimental outputs.
+- `FINAL_REPORT.md`: Comprehensive academic research manuscript.
+- `FAILURE_ANALYSIS.md`: Systematic investigation of failure cases (AMOC, Hopf, N-tipping, R-tipping).
+- `LIMITATIONS.md`: Formal theoretical and observational boundary conditions.
+- `CLAIM_AUDIT.md`: Itemized claim verification register.
+- `experiments/REGISTRY.md`: Structured experiment ledger (`EXP-001` - `EXP-009`).

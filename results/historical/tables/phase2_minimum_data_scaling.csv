@@ -1,0 +1,13 @@
+Noise_Sigma,Sampling_Dt,Target_AUC,N_min_samples,Achieved_AUC,Status
+0.02,0.02,0.75,2000,1.0,Sufficient Data Found
+0.02,0.05,0.75,800,1.0,Sufficient Data Found
+0.02,0.1,0.75,400,1.0,Sufficient Data Found
+0.05,0.02,0.75,2000,1.0,Sufficient Data Found
+0.05,0.05,0.75,800,1.0,Sufficient Data Found
+0.05,0.1,0.75,400,1.0,Sufficient Data Found
+0.1,0.02,0.75,2000,0.9963004923352355,Sufficient Data Found
+0.1,0.05,0.75,800,0.996574384787472,Sufficient Data Found
+0.1,0.1,0.75,400,0.9960801122194514,Sufficient Data Found
+0.2,0.02,0.75,2000,0.9381937472110664,Sufficient Data Found
+0.2,0.05,0.75,800,0.9395384288145207,Sufficient Data Found
+0.2,0.1,0.75,400,0.9415848214285715,Sufficient Data Found

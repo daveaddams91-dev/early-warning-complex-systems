@@ -1,4 +1,4 @@
-﻿"""
+"""
 Regularized Elastic-Net Logistic Early-Warning Model (CEWF-ElasticNet).
 """
 
@@ -52,10 +52,7 @@ class ElasticNetWarningModel(BaseEarlyWarningModel):
                 all_feats.append(valid)
         if len(all_feats) > 0:
             X = np.vstack(all_feats)
-            n = len(X)
-            y = np.zeros(n)
-            y[int(0.7 * n) :] = 1
-            self.train_on_labeled_data(X, y)
+            self.scaler.fit(X)
         return self
 
     def predict_score(

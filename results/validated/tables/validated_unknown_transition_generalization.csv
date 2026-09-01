@@ -1,0 +1,6 @@
+System,Transition_Mechanism,Method,Trajectory_ROC_AUC,Trajectory_PR_AUC,True_Positive_Rate,Early_False_Alarm_Rate,Mean_Lead_Time,Zero_Knowledge_Generalization
+Adler_SNIC_Oscillator,Saddle-Node on Invariant Circle (Global),AR(1),0.8049999999999999,0.8059940166650693,0.05,0.95,63.53499999998676,SUCCESS
+Adler_SNIC_Oscillator,Saddle-Node on Invariant Circle (Global),Variance,1.0,1.0,0.05,0.95,63.934999999986964,SUCCESS
+Adler_SNIC_Oscillator,Saddle-Node on Invariant Circle (Global),PermutationEntropy,0.4425,0.4716075965372365,0.1,0.9,71.39999999998554,PARTIAL/FAILED
+Adler_SNIC_Oscillator,Saddle-Node on Invariant Circle (Global),CEWF-Mahalanobis,0.96,0.9670958953756941,0.25,0.75,66.95599999998515,SUCCESS
+Adler_SNIC_Oscillator,Saddle-Node on Invariant Circle (Global),Adaptive-Bayesian-EWS,0.9725,0.9778049289891395,0.05,0.95,76.13499999998471,SUCCESS

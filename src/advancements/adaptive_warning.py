@@ -1,4 +1,4 @@
-﻿"""
+"""
 Game-Changer #2: The Adaptive Bayesian Early-Warning System (ABEWS).
 Dynamically estimates P(indicator_i is informative | X_1:t) online and has the explicit
 capability to abstain from false alarms when indicators conflict or noise dominates.
@@ -72,9 +72,15 @@ class AdaptiveWarningSystem(BaseEarlyWarningModel):
             # 2. Local Signal-to-Noise Ratio (SNR) in indicator space
             if k >= self.trend_window:
                 sub_feats = features[k - self.trend_window + 1 : k + 1]
-                mean_diff = np.abs(np.nanmean(sub_feats[-5:], axis=0) - np.nanmean(sub_feats[:5], axis=0))
-                noise_std = np.nanstd(sub_feats, axis=0) + 1e-6
-                snr = mean_diff / noise_std
+                valid_sub = sub_feats[~np.isnan(sub_feats).any(axis=1)]
+                if len(valid_sub) >= 10:
+                    head_m = np.mean(valid_sub[:5], axis=0)
+                    tail_m = np.mean(valid_sub[-5:], axis=0)
+                    mean_diff = np.abs(tail_m - head_m)
+                    noise_std = np.std(valid_sub, axis=0) + 1e-6
+                    snr = mean_diff / noise_std
+                else:
+                    snr = np.ones(n_ind)
             else:
                 snr = np.ones(n_ind)
 

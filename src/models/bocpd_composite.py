@@ -1,4 +1,4 @@
-﻿"""
+"""
 Bayesian Online Changepoint Detection Composite Model (CEWF-BOCPD).
 """
 
@@ -21,8 +21,20 @@ class BayesianChangepointModel(BaseEarlyWarningModel):
         self.hazard_rate = hazard_rate
         self.prior_mean = prior_mean
         self.prior_var = prior_var
+        self.baseline_means: Optional[np.ndarray] = None
+        self.baseline_stds: Optional[np.ndarray] = None
 
     def fit(self, baseline_trajectories: List[np.ndarray], window_size: int = 50, step: int = 1) -> 'BayesianChangepointModel':
+        all_feats = []
+        for traj in baseline_trajectories:
+            feat = self.extract_indicator_features(traj, window_size=window_size, step=step)
+            valid_rows = feat[~np.isnan(feat).any(axis=1)]
+            if len(valid_rows) > 0:
+                all_feats.append(valid_rows)
+        if len(all_feats) > 0:
+            concat = np.vstack(all_feats)
+            self.baseline_means = np.nanmean(concat, axis=0)
+            self.baseline_stds = np.nanstd(concat, axis=0) + 1e-6
         return self
 
     def predict_score(
@@ -44,8 +56,13 @@ class BayesianChangepointModel(BaseEarlyWarningModel):
             return scores
             
         feats_valid = features[valid_indices]
-        mean_base = np.mean(feats_valid[:min(len(feats_valid), 50)], axis=0)
-        std_base = np.std(feats_valid[:min(len(feats_valid), 50)], axis=0) + 1e-6
+        if self.baseline_means is not None and self.baseline_stds is not None:
+            mean_base = self.baseline_means
+            std_base = self.baseline_stds
+        else:
+            mean_base = np.mean(feats_valid[:min(len(feats_valid), 50)], axis=0)
+            std_base = np.std(feats_valid[:min(len(feats_valid), 50)], axis=0) + 1e-6
+            
         norm_series = np.mean(np.maximum((feats_valid - mean_base) / std_base, 0.0), axis=1)
         
         T = len(norm_series)

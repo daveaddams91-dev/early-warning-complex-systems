@@ -1,4 +1,4 @@
-﻿"""
+"""
 High-Performance Stochastic Differential Equation (SDE) Integrator and Observation Pipeline.
 
 Provides:
@@ -80,6 +80,11 @@ class SDEIntegrator:
             if not collapsed and self.system.is_collapsed(x_curr, mu_val):
                 collapsed = True
                 t_crit = t_curr
+                # If current time is not already in t_arr, append it so t_arr reflects the collapse instant
+                if len(t_arr) == 0 or t_arr[-1] != t_curr:
+                    t_arr.append(t_curr)
+                    x_arr.append(x_curr.copy())
+                    mu_arr.append(mu_val)
                 collapse_step = len(t_arr) - 1
                 if stop_on_collapse:
                     break
