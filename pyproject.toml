@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "early_warning_complex_systems"
+version = "1.0.0"
+description = "Mathematical research framework testing whether statistical, physical, and information-theoretic indicators can anticipate critical transitions and collapse in complex systems."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "rajveersinh-is-dev"},
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.urls]
+Homepage = "https://github.com/rajveersinh-is-dev/early-warning-complex-systems"
+
+[tool.setuptools]
+py-modules = ['']

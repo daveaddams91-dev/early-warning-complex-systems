@@ -3,9 +3,7 @@ Comprehensive Experimental Runner for Hierarchical Levels 1-6.
 Optimized for high throughput via single-pass feature caching.
 """
 
-import os
 import sys
-import json
 import time
 from pathlib import Path
 from typing import Dict, Any, List, Tuple
@@ -54,6 +52,15 @@ from src.visualization.plots import (
 
 
 def get_all_indicators_and_models(dt_obs: float = 0.05) -> Tuple[Dict[str, Any], Dict[str, Any], List[Any]]:
+    """Retrieve all indicators and models.
+    
+    Args:
+        dt_obs (float):
+    
+    Returns:
+        tuple: Result of type tuple
+    
+    """
     indicators = {
         'Variance': VarianceIndicator(),
         'AR(1)': AutocorrelationLag1Indicator(),
@@ -117,6 +124,14 @@ def run_experiment_suite(
     eval_step: int = 4,
     output_dir: str = "experiments/results"
 ):
+    """Worker function for experiment suite.
+    
+    Args:
+        n_runs (int):
+        eval_step (int):
+        output_dir (str):
+    
+    """
     print("=" * 70, flush=True)
     print(f"STARTING FAST EXPERIMENTAL BENCHMARK (N_runs={n_runs}, eval_step={eval_step})", flush=True)
     print("=" * 70, flush=True)
@@ -200,7 +215,7 @@ def run_experiment_suite(
             
             flat_null = np.concatenate(null_sc)
             valid_flat = flat_null[~np.isnan(flat_null)]
-            thresh = np.percentile(valid_flat, 95) if len(valid_flat) > 0 else 1.0
+            thresh = np.percentile(valid_flat, 95) if bool(valid_flat) else 1.0
             time_arrays = [r['t'] for r in ramp_trajs]
             lead_res = compute_lead_time_distribution(ramp_sc, time_arrays, collapse_times, threshold=thresh)
             far_val = compute_false_alarm_rate(null_sc, threshold=thresh)
@@ -387,7 +402,8 @@ def run_experiment_suite(
         m.fit(train_null_trajs, window_size=window_size, step=eval_step)
         
     level5_results = []
-    for test_sys, test_ramp, test_tmax, test_null, test_tag in systems_config[1:]:
+    for test_sys, test_ramp, test_tmax, test_null, test_tag in systems_config[1:
+        ]:
         print(f"  Zero-shot on {test_tag} ...", flush=True)
         int_test = SDEIntegrator(test_sys, dt_sim=0.01, dt_obs=dt_obs)
         test_ramp_trajs = [int_test.simulate(t_max=test_tmax, mu_func=test_ramp, seed=10000 + r, stop_on_collapse=True) for r in range(n_runs)]
