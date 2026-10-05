@@ -6,12 +6,9 @@ All outputs saved to results/validated/.
 """
 
 import sys
-import time
 from pathlib import Path
-from typing import Dict, Any, List, Tuple
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
@@ -37,7 +34,6 @@ from src.indicators.multivariate import (
 from src.models.linear_composite import LinearCompositeModel
 from src.models.rank_composite import RankAggregationModel
 from src.models.mahalanobis_composite import MultiIndicatorMahalanobisModel
-from src.models.elastic_net_composite import ElasticNetWarningModel
 from src.models.bocpd_composite import BayesianChangepointModel
 from src.advancements.adaptive_warning import AdaptiveWarningSystem
 from src.evaluation.metrics import (
@@ -50,6 +46,15 @@ from src.evaluation.metrics import (
 
 
 def get_core_methods(dt_obs: float = 0.05):
+    """Retrieve core methods.
+    
+    Args:
+        dt_obs (float):
+    
+    Returns:
+        tuple: Result of type tuple
+    
+    """
     indicators = {
         'Variance': VarianceIndicator(),
         'AR(1)': AutocorrelationLag1Indicator(),
@@ -70,6 +75,20 @@ def get_core_methods(dt_obs: float = 0.05):
 
 
 def evaluate_trajectory(x: np.ndarray, indicators: dict, models: dict, core_subset: list, window_size: int = 50, step: int = 4):
+    """Evaluate trajectory.
+    
+    Args:
+        x:
+        indicators:
+        models:
+        core_subset:
+        window_size (int):
+        step (int):
+    
+    Returns:
+        The computed result
+    
+    """
     scores = {}
     x_1d = x[:, 0] if x.ndim > 1 else x
     for name, ind in indicators.items():
@@ -86,6 +105,13 @@ def evaluate_trajectory(x: np.ndarray, indicators: dict, models: dict, core_subs
 
 
 def run_validated_experiments(n_runs: int = 25, eval_step: int = 4):
+    """Worker function for validated experiments.
+    
+    Args:
+        n_runs (int):
+        eval_step (int):
+    
+    """
     print("=" * 70, flush=True)
     print(f"STARTING PHASE 3 VALIDATED BENCHMARK SUITE (N_runs={n_runs}, Trajectory-Level)", flush=True)
     print("=" * 70, flush=True)
@@ -156,8 +182,8 @@ def run_validated_experiments(n_runs: int = 25, eval_step: int = 4):
 
             # Determine 95th percentile threshold on null runs
             idx_safe = int(safe_time / dt_obs)
-            flat_null = np.concatenate([s[idx_safe:][~np.isnan(s[idx_safe:])] for s in n_sc]) if len(n_sc) > 0 else np.array([])
-            thresh = float(np.percentile(flat_null, 95)) if len(flat_null) > 0 else 1.0
+            flat_null = np.concatenate([s[idx_safe:][~np.isnan(s[idx_safe:])] for s in n_sc]) if bool(n_sc) else np.array([])
+            thresh = float(np.percentile(flat_null, 95)) if bool(flat_null) else 1.0
 
             # Operational early warning distribution
             op_res = compute_operational_lead_time_distribution(
