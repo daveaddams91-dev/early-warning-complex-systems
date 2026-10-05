@@ -1,9 +1,3 @@
-"""
-Ablation Study: Mechanistic Investigation of the AMOC (SYS-4) Failure.
-Tests individual indicators and transforms on the Stommel 2-Box model to isolate
-why CSD collapses and whether mathematical reparametrizations recover signal.
-"""
-
 import sys
 from pathlib import Path
 from typing import Dict, Any, List, Tuple
@@ -36,19 +30,19 @@ def apply_transform(x: np.ndarray, transform_name: str) -> np.ndarray:
     
     if transform_name == "raw":
         return x_arr
-
+    
     elif transform_name == "log_transform":
         # Shift to positive domain if necessary
         min_val = np.min(x_arr, axis=0, keepdims=True)
         shifted = x_arr - min_val + 1e-2
         return np.log(shifted)
-
+    
     elif transform_name == "first_difference":
         diff = np.diff(x_arr, axis=0)
         # Pad first row with zero to maintain length
         first_row = np.zeros((1, x_arr.shape[1])) if x_arr.ndim > 1 else np.zeros(1)
         return np.vstack([first_row, diff]) if x_arr.ndim > 1 else np.concatenate([first_row, diff])
-
+    
     elif transform_name == "local_detrend":
         # Rolling local detrending with small window (e.g. 20 steps)
         w = 20
@@ -59,7 +53,7 @@ def apply_transform(x: np.ndarray, transform_name: str) -> np.ndarray:
             mean_val = np.mean(x_arr[start : i + 1], axis=0)
             detrended[i] = x_arr[i] - mean_val
         return detrended
-
+    
     elif transform_name == "linearizing_reparam":
         # Monotonic quadratic reparametrization:
         # In Stommel box model, the advective drag is -|T - S|T = -q T = -T^2 + TS.
@@ -73,7 +67,7 @@ def apply_transform(x: np.ndarray, transform_name: str) -> np.ndarray:
         else:
             # For scalar T alone, apply quadratic power reparametrization T^2
             return x_arr ** 2
-
+    
     else:
         raise ValueError(f"Unknown transform: {transform_name}")
 
