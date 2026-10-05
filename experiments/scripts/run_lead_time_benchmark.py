@@ -4,27 +4,37 @@ Runs Monte Carlo evaluations on all 5 canonical systems, generates lead-time dis
 at FAR = 1%, 5%, 10%, and plots Lead-Time vs FAR curves.
 """
 
-import sys
 from pathlib import Path
-from typing import Dict, Any, List
+import sys
+
+from src.advancements.adaptive_inference_framework import AdaptiveInferenceFramework
+from src.evaluation.lead_time import compute_lead_time_distribution, generate_lead_time_vs_far_curve
+from src.indicators.univariate import VarianceIndicator, AutocorrelationLag1Indicator
+from src.models.mahalanobis_composite import MultiIndicatorMahalanobisModel
+from src.simulation.integrator import SDEIntegrator
+from src.systems.coupled_network import CoupledNetworkSystem
+from src.systems.fitzhugh_nagumo import FitzHughNagumoSystem
+from src.systems.may_harvesting import MayHarvestingSystem
+from src.systems.stommel_box import StommelBoxSystem
+from src.systems.subcritical_pitchfork import SubcriticalPitchforkSystem
 import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from src.systems.may_harvesting import MayHarvestingSystem
-from src.systems.fitzhugh_nagumo import FitzHughNagumoSystem
-from src.systems.subcritical_pitchfork import SubcriticalPitchforkSystem
-from src.systems.stommel_box import StommelBoxSystem
-from src.systems.coupled_network import CoupledNetworkSystem
-from src.simulation.integrator import SDEIntegrator
-from src.indicators.univariate import VarianceIndicator, AutocorrelationLag1Indicator
-from src.models.mahalanobis_composite import MultiIndicatorMahalanobisModel
-from src.advancements.adaptive_inference_framework import AdaptiveInferenceFramework
-from src.evaluation.lead_time import compute_lead_time_distribution, generate_lead_time_vs_far_curve
 
 
 def run_full_lead_time_benchmark(n_runs: int = 25, dt_obs: float = 0.05) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Worker function for full lead time benchmark.
+    
+    Args:
+        n_runs (int):
+        dt_obs (float):
+    
+    Returns:
+        tuple: Result of type tuple
+    
+    """
     print("=" * 70, flush=True)
     print("RUNNING OPERATIONAL LEAD-TIME VS. FALSE ALARM RATE BENCHMARK", flush=True)
     print("=" * 70, flush=True)
