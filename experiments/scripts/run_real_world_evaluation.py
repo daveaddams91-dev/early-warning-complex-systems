@@ -6,7 +6,6 @@ on the historical Younger Dryas abrupt climate transition (~11.7 ka BP).
 
 import sys
 from pathlib import Path
-from typing import Dict, Any, List
 import numpy as np
 import pandas as pd
 from scipy.stats import kendalltau
@@ -26,6 +25,12 @@ from src.models.deep_ews import DeepEWSModel
 
 
 def run_real_world_evaluation() -> pd.DataFrame:
+    """Worker function for real world evaluation.
+    
+    Returns:
+        The computed result
+    
+    """
     print("=" * 70, flush=True)
     print("EVALUATING INDICATORS ON REAL-WORLD GISP2 PALEOCLIMATE TRANSITION", flush=True)
     print("=" * 70, flush=True)
