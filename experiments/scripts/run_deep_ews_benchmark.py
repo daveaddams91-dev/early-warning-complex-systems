@@ -6,7 +6,6 @@ and computes DeLong statistical significance tests against CEWF-Mahalanobis.
 
 import sys
 from pathlib import Path
-from typing import Dict, Any, List
 import numpy as np
 import pandas as pd
 
@@ -34,6 +33,16 @@ from src.evaluation.metrics import (
 
 
 def run_deep_ews_benchmark(n_runs: int = 25, dt_obs: float = 0.05) -> pd.DataFrame:
+    """Worker function for deep ews benchmark.
+    
+    Args:
+        n_runs (int):
+        dt_obs (float):
+    
+    Returns:
+        The computed result
+    
+    """
     print("=" * 70, flush=True)
     print("RUNNING DEEP LEARNING (BURY ET AL. 2021) BASELINE BENCHMARK", flush=True)
     print("=" * 70, flush=True)
@@ -121,6 +130,17 @@ def run_deep_ews_benchmark(n_runs: int = 25, dt_obs: float = 0.05) -> pd.DataFra
 
         # DeLong Paired Significance Test on robust trajectory peak scores
         def get_peaks(sc_list, t_list, c_list=None):
+            """Retrieve peaks.
+            
+            Args:
+                sc_list:
+                t_list:
+                c_list:
+            
+            Returns:
+                The computed result
+            
+            """
             pks = []
             for idx, (s_arr, t_arr) in enumerate(zip(sc_list, t_list)):
                 if c_list is not None:
@@ -129,7 +149,7 @@ def run_deep_ews_benchmark(n_runs: int = 25, dt_obs: float = 0.05) -> pd.DataFra
                 else:
                     mask = (t_arr >= safe_t) & (~np.isnan(s_arr))
                 vals = s_arr[mask]
-                pks.append(float(np.max(vals)) if len(vals) > 0 else 0.0)
+                pks.append(float(np.max(vals)) if bool(vals) else 0.0)
             return pks
 
         deep_r_peaks = get_peaks(deep_r, r_times, c_times)
