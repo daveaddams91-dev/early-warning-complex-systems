@@ -8,8 +8,8 @@ H2_Noise_Dilution,Clean_Data_Plus_16_Uninformative_Indicators,Monotonic AUC degr
 H1_Noise_Averaging,Severe_Noise_0dB_Scalar_AR1,Single AR(1) fails due to high-frequency noise bias,0.0,SUPPORTED
 H1_Noise_Averaging,Severe_Noise_0dB_Energy_Variance,Total energy variance integrates over noise floor,1.0,SUPPORTED
 H4_Geometric_Mismatch,Stommel_AMOC_Eigenvector_Rotation,Critical manifold rotates orthogonal to observed temperature axis,66.15857413396076,SUPPORTED
-H6_Estimation_Instability,Sliding_Window_W_15_Covariance_Condition,Small windows produce severe covariance matrix ill-conditioning,5.642249505397985,PARTIAL
-H6_Estimation_Instability,Sliding_Window_W_30_Covariance_Condition,Small windows produce severe covariance matrix ill-conditioning,2.2599070672169184,PARTIAL
-H6_Estimation_Instability,Sliding_Window_W_50_Covariance_Condition,Small windows produce severe covariance matrix ill-conditioning,1.6964481614634237,PARTIAL
+H6_Estimation_Instability,Sliding_Window_W_15_Covariance_Condition,Small windows produce severe covariance matrix ill-conditioning,5.64224950539799,PARTIAL
+H6_Estimation_Instability,Sliding_Window_W_30_Covariance_Condition,Small windows produce severe covariance matrix ill-conditioning,2.259907067216919,PARTIAL
+H6_Estimation_Instability,Sliding_Window_W_50_Covariance_Condition,Small windows produce severe covariance matrix ill-conditioning,1.6964481614634244,PARTIAL
 H6_Estimation_Instability,Sliding_Window_W_100_Covariance_Condition,Small windows produce severe covariance matrix ill-conditioning,1.7444104515607683,SUPPORTED
 H8_Information_Limitation,N_Tipping_Constant_Potential_Well,Potential well curvature is constant; zero advance information exists in stationary fluctuations,,REFUTED
